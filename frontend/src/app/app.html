@@ -1,0 +1,38 @@
+<div class="min-h-screen flex justify-center items-center p-4 font-os">
+  <p-card class="min-w-[370px] w-full max-w-[450px] overflow-hidden">
+    <ng-template pTemplate="header">
+      <div
+        class="text-lg font-semibold border border-[#333] bg-[#1e1e1e] text-green-400 shadow-2xl p-4 rounded-t-lg"
+      >
+        @if (studentData?.student_id){ root@student:~/status/{{ studentData?.student_id }}$ } @else
+        { root@student:~/status$ }
+      </div>
+    </ng-template>
+
+    @if (!studentData) {
+
+    <div class="flex flex-col gap-4">
+      <div class="text-gray-400 text-sm mb-2">> ./check_status --student-id</div>
+      <p-floatlabel variant="on">
+        <input
+          pInputText
+          id="sid"
+          [(ngModel)]="studentId"
+          autocomplete="off"
+          class="w-full bg-black text-green-400 border-gray-700 focus:border-green-500"
+        />
+        <label for="sid">Enter Student ID</label>
+      </p-floatlabel>
+      <p-button
+        styleClass="w-full bg-green-700 border-green-600 hover:bg-green-600 text-white font-bold"
+        (onClick)="getGrades()"
+        label="Check"
+      />
+    </div>
+    } @else {
+    <student-summary [studentData]="studentData" (onGoBack)="studentData = null"></student-summary>
+    }
+  </p-card>
+</div>
+
+<router-outlet />
