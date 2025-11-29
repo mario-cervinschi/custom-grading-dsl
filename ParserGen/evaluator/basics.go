@@ -32,16 +32,16 @@ func (v *Evaluator) VisitAssignmentExpression(ctx *parser.AssignmentExpressionCo
 	val := v.Visit(ctx.Expression())
 
 	v.Memory[varName] = val
-	switch v := val.(type) {
-	case float64:
-		fmt.Printf("Assigned %s = %.2f\n", varName, v)
-	case bool:
-		fmt.Printf("Assigned %s = %v\n", varName, v)
-	case string:
-		fmt.Printf("Assigned %s = %s\n", varName, v)
-	default:
-		fmt.Printf("Assigned %s = %v\n", varName, v)
-	}
+	//switch v := val.(type) {
+	//case float64:
+	//	fmt.Printf("Assigned %s = %.2f\n", varName, v)
+	//case bool:
+	//	fmt.Printf("Assigned %s = %v\n", varName, v)
+	//case string:
+	//	fmt.Printf("Assigned %s = %s\n", varName, v)
+	//default:
+	//	fmt.Printf("Assigned %s = %v\n", varName, v)
+	//}
 	return val
 }
 

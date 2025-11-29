@@ -1,7 +1,6 @@
 // Code generated from parser/ExprParser.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // ExprParser
-
 import "github.com/antlr4-go/antlr/v4"
 
 // A complete Visitor for a parse tree produced by ExprParser.
@@ -14,14 +13,11 @@ type ExprParserVisitor interface {
 	// Visit a parse tree produced by ExprParser#apply.
 	VisitApply(ctx *ApplyContext) interface{}
 
-	// Visit a parse tree produced by ExprParser#ExplainBasic.
-	VisitExplainBasic(ctx *ExplainBasicContext) interface{}
+	// Visit a parse tree produced by ExprParser#normal_operation.
+	VisitNormal_operation(ctx *Normal_operationContext) interface{}
 
-	// Visit a parse tree produced by ExprParser#ExplainConditional.
-	VisitExplainConditional(ctx *ExplainConditionalContext) interface{}
-
-	// Visit a parse tree produced by ExprParser#ExplainOverride.
-	VisitExplainOverride(ctx *ExplainOverrideContext) interface{}
+	// Visit a parse tree produced by ExprParser#when_operation.
+	VisitWhen_operation(ctx *When_operationContext) interface{}
 
 	// Visit a parse tree produced by ExprParser#function.
 	VisitFunction(ctx *FunctionContext) interface{}

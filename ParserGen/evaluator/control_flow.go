@@ -5,7 +5,7 @@ package evaluator
 import (
 	"ParserGen/parser"
 	"fmt"
-	"strings"
+	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -27,7 +27,7 @@ func (v *Evaluator) VisitApply(ctx *parser.ApplyContext) interface{} {
 	listCtx := ctx.List()
 	identifiers := listCtx.AllIDENTIFIER()
 
-	fmt.Println("Applying lambda to list:")
+	//fmt.Println("Applying lambda to list:")
 	for _, id := range identifiers {
 		varName := id.GetText()
 		if val, exists := v.Memory[varName]; exists {
@@ -41,40 +41,89 @@ func (v *Evaluator) VisitApply(ctx *parser.ApplyContext) interface{} {
 	return nil
 }
 
-func (v *Evaluator) VisitExplainBasic(ctx *parser.ExplainBasicContext) interface{} {
+func (v *Evaluator) VisitNormal_operation(ctx *parser.Normal_operationContext) interface{} {
+	hasExplanation := ctx.EXPLAIN() != nil
+	hasDescription := ctx.STRING() != nil
+
+	if hasExplanation {
+		v.IsExplaining = true
+
+		originalExpr := ctx.Expression().GetText()
+
+		builder := &ExpressionBuilder{Memory: v.Memory}
+		substitutedExpr := builder.BuildSubstituted(ctx.Expression())
+
+		v.CurrentExplanation = &ExplanationData{
+			OriginalExpression:    originalExpr,
+			SubstitutedExpression: substitutedExpr,
+		}
+	}
+
 	result := v.Visit(ctx.Expression())
 
-	if val, ok := result.(float64); ok {
-		fmt.Printf("Result: %.2f\n", val)
-	} else if val, ok := result.(string); ok {
-		fmt.Printf("Result: %s\n", val)
-	} else if val, ok := result.(bool); ok {
-		fmt.Printf("Result: %v\n", val)
+	if hasExplanation {
+		var resultStr string
+		switch val := result.(type) {
+		case float64:
+			resultStr = fmt.Sprintf("%.2f", val)
+		case bool:
+			resultStr = fmt.Sprintf("%v", val)
+		case string:
+			resultStr = val
+		default:
+			resultStr = fmt.Sprintf("%v", val)
+		}
+
+		if hasDescription {
+			stringDescription, err := strconv.Unquote(fmt.Sprintf("%v", ctx.STRING()))
+			if err != nil {
+				panic(err)
+			}
+			v.CurrentExplanation.Description = stringDescription
+		}
+
+		v.CurrentExplanation.Result = resultStr
+		v.AllExplanations = append(v.AllExplanations, *v.CurrentExplanation)
+
+		//fmt.Printf("  %s\n", v.CurrentExplanation.OriginalExpression)
+		//fmt.Printf("  %s\n", v.CurrentExplanation.SubstitutedExpression)
+		//fmt.Printf("  %s\n", resultStr)
+		//fmt.Printf("  %s\n", v.CurrentExplanation.Description)
+		//fmt.Println()
+
+		v.IsExplaining = false
+		v.CurrentExplanation = nil
 	}
 
 	return result
 }
 
-func (v *Evaluator) VisitExplainConditional(ctx *parser.ExplainConditionalContext) interface{} {
-	return v.Visit(ctx.Expression())
-}
+func (v *Evaluator) VisitWhen_operation(ctx *parser.When_operationContext) interface{} {
+	identifierListCtx := ctx.List()
+	identifierList := identifierListCtx.AllIDENTIFIER()
 
-func (v *Evaluator) VisitExplainOverride(ctx *parser.ExplainOverrideContext) interface{} {
-	targetName := ctx.GetTarget().GetText()
+	inMemory := true
 
-	sourceName := ctx.GetSource().GetText()
-
-	msgRaw := ctx.STRING().GetText()
-	msg := strings.Trim(msgRaw, "\"")
-
-	if val, exists := v.Memory[sourceName]; exists {
-		v.Memory[targetName] = val
-
-		fmt.Printf("\nOVERRIDE: %s = %v\n", targetName, val)
-		fmt.Printf("    mesaj: %s\n", msg)
-		return val
+	for _, id := range identifierList {
+		varName := id.GetText()
+		if _, exists := v.Memory[varName]; !exists {
+			inMemory = false
+		}
 	}
 
+	if identifierList != nil && inMemory {
+		result := v.Visit(ctx.Normal_operation())
+
+		//if val, ok := result.(float64); ok {
+		//	fmt.Printf("Result: %.2f\n", val)
+		//} else if val, ok := result.(string); ok {
+		//	fmt.Printf("Result: %s\n", val)
+		//} else if val, ok := result.(bool); ok {
+		//	fmt.Printf("Result: %v\n", val)
+		//}
+
+		return result
+	}
 	return nil
 }
 
@@ -103,7 +152,7 @@ func (v *Evaluator) VisitIterateExpression(ctx *parser.IterateExpressionContext)
 			return v.Visit(ctx.Expression(1))
 		}
 	}
-	fmt.Printf("Iteration results: %v\n", results)
+	//fmt.Printf("Iteration results: %v\n", results)
 	return results
 }
 

@@ -1,7 +1,6 @@
 // Code generated from parser/ExprParser.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // ExprParser
-
 import "github.com/antlr4-go/antlr/v4"
 
 // BaseExprParserListener is a complete listener for a parse tree produced by ExprParser.
@@ -33,23 +32,17 @@ func (s *BaseExprParserListener) EnterApply(ctx *ApplyContext) {}
 // ExitApply is called when production apply is exited.
 func (s *BaseExprParserListener) ExitApply(ctx *ApplyContext) {}
 
-// EnterExplainBasic is called when production ExplainBasic is entered.
-func (s *BaseExprParserListener) EnterExplainBasic(ctx *ExplainBasicContext) {}
+// EnterNormal_operation is called when production normal_operation is entered.
+func (s *BaseExprParserListener) EnterNormal_operation(ctx *Normal_operationContext) {}
 
-// ExitExplainBasic is called when production ExplainBasic is exited.
-func (s *BaseExprParserListener) ExitExplainBasic(ctx *ExplainBasicContext) {}
+// ExitNormal_operation is called when production normal_operation is exited.
+func (s *BaseExprParserListener) ExitNormal_operation(ctx *Normal_operationContext) {}
 
-// EnterExplainConditional is called when production ExplainConditional is entered.
-func (s *BaseExprParserListener) EnterExplainConditional(ctx *ExplainConditionalContext) {}
+// EnterWhen_operation is called when production when_operation is entered.
+func (s *BaseExprParserListener) EnterWhen_operation(ctx *When_operationContext) {}
 
-// ExitExplainConditional is called when production ExplainConditional is exited.
-func (s *BaseExprParserListener) ExitExplainConditional(ctx *ExplainConditionalContext) {}
-
-// EnterExplainOverride is called when production ExplainOverride is entered.
-func (s *BaseExprParserListener) EnterExplainOverride(ctx *ExplainOverrideContext) {}
-
-// ExitExplainOverride is called when production ExplainOverride is exited.
-func (s *BaseExprParserListener) ExitExplainOverride(ctx *ExplainOverrideContext) {}
+// ExitWhen_operation is called when production when_operation is exited.
+func (s *BaseExprParserListener) ExitWhen_operation(ctx *When_operationContext) {}
 
 // EnterFunction is called when production function is entered.
 func (s *BaseExprParserListener) EnterFunction(ctx *FunctionContext) {}

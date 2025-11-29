@@ -99,6 +99,7 @@ epr = 4.0
 rpr = 4.0
 eth = 4.0
 rth = 4.0
+fgrade = 8
 
 [103]
 group = 921

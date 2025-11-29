@@ -22,6 +22,13 @@ type SituatuionRequest struct {
 	Group     string `json:"group"`
 }
 
+type ExplanationStep struct {
+	Original    string  `json:"original"`
+	Substituted string  `json:"substituted"`
+	Result      string  `json:"result"`
+	Description *string `json:"description,omitempty"`
+}
+
 type SituationResponse struct {
 	StudentID     string                 `json:"student_id"`
 	SemAttendance interface{}            `json:"sem_attendance"`
@@ -42,7 +49,11 @@ type SituationResponse struct {
 	FinalGrade    interface{}            `json:"final_grade"`
 	Score         interface{}            `json:"score"`
 	Details       map[string]interface{} `json:"details"`
-	Error         string                 `json:"error,omitempty"`
+	Explanations  []ExplanationStep      `json:"explanations"`
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
 }
 
 func enableCors(next http.HandlerFunc) http.HandlerFunc {
@@ -60,7 +71,7 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func runGradingLogic(studentData evaluator.Variables) (evaluator.Variables, error) {
+func runGradingLogic(studentData evaluator.Variables) (evaluator.Variables, []evaluator.ExplanationData, error) {
 	eval := evaluator.NewEvaluator(studentData)
 	for _, op := range cachedOperations {
 		is := antlr.NewInputStream(op)
@@ -71,7 +82,7 @@ func runGradingLogic(studentData evaluator.Variables) (evaluator.Variables, erro
 		tree := p.Algorithm()
 		eval.Visit(tree)
 	}
-	return eval.Memory, nil
+	return eval.Memory, eval.AllExplanations, nil
 }
 
 func gradeHandler(w http.ResponseWriter, r *http.Request) {
@@ -86,14 +97,16 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(SituationResponse{Error: "Invalid JSON body"})
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "Invalid JSON body"})
 		return
 	}
+
+	fmt.Printf("[LOG] - Searching for student with ID %s\n", req.StudentID)
 
 	studentData, found := fetchStudentData(req.StudentID)
 	if !found {
 		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(SituationResponse{Error: "Student ID not found in database"})
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "Student ID not found in database"})
 		return
 	}
 
@@ -101,11 +114,26 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 		studentData["group"] = req.Group
 	}
 
-	finalMemory, err := runGradingLogic(studentData)
+	finalMemory, explanations, err := runGradingLogic(studentData)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(SituationResponse{Error: "Calculation error"})
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "Calculation error"})
 		return
+	}
+
+	var explSteps []ExplanationStep
+	for _, expl := range explanations {
+		exp := ExplanationStep{
+			Original:    expl.OriginalExpression,
+			Substituted: expl.SubstitutedExpression,
+			Result:      expl.Result,
+		}
+
+		if expl.Description != "" {
+			exp.Description = &expl.Description
+		}
+
+		explSteps = append(explSteps, exp)
 	}
 
 	response := SituationResponse{
@@ -127,6 +155,7 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 		SH:            finalMemory["sh"],
 		PR:            finalMemory["pr"],
 		TH:            finalMemory["th"],
+		Explanations:  explSteps,
 	}
 
 	json.NewEncoder(w).Encode(response)

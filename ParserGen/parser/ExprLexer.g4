@@ -6,7 +6,9 @@ lexer grammar ExprLexer;
 
 APPLY: A P P L Y;
 TO: T O;
-EXPLAINQ: E X P L A I N ASK;
+
+WHEN: W H E N;
+EXISTS: E X I S T S;
 EXPLAIN: E X P L A I N;
 
 MAX: M A X;

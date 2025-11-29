@@ -1,7 +1,6 @@
 // Code generated from parser/ExprParser.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // ExprParser
-
 import "github.com/antlr4-go/antlr/v4"
 
 // ExprParserListener is a complete listener for a parse tree produced by ExprParser.
@@ -14,14 +13,11 @@ type ExprParserListener interface {
 	// EnterApply is called when entering the apply production.
 	EnterApply(c *ApplyContext)
 
-	// EnterExplainBasic is called when entering the ExplainBasic production.
-	EnterExplainBasic(c *ExplainBasicContext)
+	// EnterNormal_operation is called when entering the normal_operation production.
+	EnterNormal_operation(c *Normal_operationContext)
 
-	// EnterExplainConditional is called when entering the ExplainConditional production.
-	EnterExplainConditional(c *ExplainConditionalContext)
-
-	// EnterExplainOverride is called when entering the ExplainOverride production.
-	EnterExplainOverride(c *ExplainOverrideContext)
+	// EnterWhen_operation is called when entering the when_operation production.
+	EnterWhen_operation(c *When_operationContext)
 
 	// EnterFunction is called when entering the function production.
 	EnterFunction(c *FunctionContext)
@@ -83,14 +79,11 @@ type ExprParserListener interface {
 	// ExitApply is called when exiting the apply production.
 	ExitApply(c *ApplyContext)
 
-	// ExitExplainBasic is called when exiting the ExplainBasic production.
-	ExitExplainBasic(c *ExplainBasicContext)
+	// ExitNormal_operation is called when exiting the normal_operation production.
+	ExitNormal_operation(c *Normal_operationContext)
 
-	// ExitExplainConditional is called when exiting the ExplainConditional production.
-	ExitExplainConditional(c *ExplainConditionalContext)
-
-	// ExitExplainOverride is called when exiting the ExplainOverride production.
-	ExitExplainOverride(c *ExplainOverrideContext)
+	// ExitWhen_operation is called when exiting the when_operation production.
+	ExitWhen_operation(c *When_operationContext)
 
 	// ExitFunction is called when exiting the function production.
 	ExitFunction(c *FunctionContext)

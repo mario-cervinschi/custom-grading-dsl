@@ -1,7 +1,6 @@
 // Code generated from parser/ExprParser.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // ExprParser
-
 import "github.com/antlr4-go/antlr/v4"
 
 type BaseExprParserVisitor struct {
@@ -16,15 +15,11 @@ func (v *BaseExprParserVisitor) VisitApply(ctx *ApplyContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseExprParserVisitor) VisitExplainBasic(ctx *ExplainBasicContext) interface{} {
+func (v *BaseExprParserVisitor) VisitNormal_operation(ctx *Normal_operationContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseExprParserVisitor) VisitExplainConditional(ctx *ExplainConditionalContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseExprParserVisitor) VisitExplainOverride(ctx *ExplainOverrideContext) interface{} {
+func (v *BaseExprParserVisitor) VisitWhen_operation(ctx *When_operationContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

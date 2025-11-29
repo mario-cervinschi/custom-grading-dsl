@@ -8,14 +8,14 @@ options {
     tokenVocab = ExprLexer;
 }
 
-algorithm: (apply | explain)* EOF;
+algorithm: (apply | normal_operation | when_operation)* EOF;
 
 apply: APPLY lambda TO list SEMICOLON;
-explain
-    : EXPLAIN expression SEMICOLON                                          # ExplainBasic
-    | EXPLAINQ expression SEMICOLON                                         # ExplainConditional
-    | EXPLAINQ target=IDENTIFIER ASSIGN source=IDENTIFIER COMMA STRING SEMICOLON # ExplainOverride
-    ;
+
+normal_operation:
+    (EXPLAIN)? expression (COMMA STRING)? SEMICOLON;
+when_operation:
+    WHEN list EXISTS normal_operation;
 
 function: MAX | MIN | ROUND;
 
