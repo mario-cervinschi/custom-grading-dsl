@@ -18,3 +18,4 @@ export class ApiClientService {
     return this.http.get<T>(`${this.baseUrl}${endpoint}`);
   }
 }
+

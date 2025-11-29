@@ -12,11 +12,11 @@
   <div class="grid grid-cols-2 gap-4 text-center">
     <div>
       <span class="text-gray-500 text-xs">SEMINAR ATTENDANCE</span>
-      <div class="text-xl font-bold text-blue-400">{{ studentData?.sem_attendance }}</div>
+      <div class="text-xl font-bold text-blue-400">{{ getResultsFromStudentData('sa') }}</div>
     </div>
     <div>
       <span class="text-gray-500 text-xs">LAB ATTENDANCE</span>
-      <div class="text-xl font-bold text-blue-400">{{ studentData?.lab_attendance }}</div>
+      <div class="text-xl font-bold text-blue-400">{{ getResultsFromStudentData('la') }}</div>
     </div>
   </div>
 
@@ -24,9 +24,9 @@
     <span class="text-xs text-gray-400">OVERALL STATUS:</span>
     <span
       class="font-bold uppercase tracking-wider"
-      [ngClass]="studentData?.attendance ? 'text-green-500' : 'text-red-500'"
+      [ngClass]="getResultsFromStudentData('attended') ? 'text-green-500' : 'text-red-500'"
     >
-      {{ studentData?.attendance ? 'GOOD' : 'NOT ENOUGH' }}
+      {{ getResultsFromStudentData('attended') ? 'GOOD' : 'NOT ENOUGH' }}
     </span>
   </div>
 </div>
@@ -35,59 +35,59 @@
   <card-grid
     eText="ESH"
     rText="RSH"
-    [eValue]="studentData?.esh"
-    [rValue]="studentData?.rsh"
+    [eValue]="getResultsFromStudentData('esh')"
+    [rValue]="getResultsFromStudentData('rsh')"
     finalText="SH"
-    [finalValue]="studentData?.sh"
+    [explanations]="getExplanationsFromStudentData('sh')"
+    [finalValue]="getResultsFromStudentData('sh')"
   ></card-grid>
 
   <card-grid
     eText="EPR"
     rText="RPR"
-    [eValue]="studentData?.epr"
-    [rValue]="studentData?.rpr"
+    [eValue]="getResultsFromStudentData('epr')"
+    [rValue]="getResultsFromStudentData('rpr')"
     finalText="PR"
-    [finalValue]="studentData?.pr"
+    [explanations]="getExplanationsFromStudentData('pr')"
+    [finalValue]="getResultsFromStudentData('pr')"
   ></card-grid>
 
   <card-grid
     eText="ETH"
     rText="RTH"
-    [eValue]="studentData?.eth"
-    [rValue]="studentData?.rth"
+    [eValue]="getResultsFromStudentData('eth')"
+    [rValue]="getResultsFromStudentData('rth')"
     finalText="TH"
-    [finalValue]="studentData?.th"
+    [explanations]="getExplanationsFromStudentData('th')"
+    [finalValue]="getResultsFromStudentData('th')"
   ></card-grid>
 
   <card-grid
     eText="EW"
     rText="RW"
-    [eValue]="studentData?.ew"
-    [rValue]="studentData?.rw"
+    [eValue]="getResultsFromStudentData('ew')"
+    [rValue]="getResultsFromStudentData('rw')"
     finalText="WRITTEN"
-    [finalValue]="studentData?.th"
+    [explanations]="getExplanationsFromStudentData('w')"
+    [finalValue]="getResultsFromStudentData('w')"
     finalClasses="text-blue-500"
   ></card-grid>
 </div>
 
 <div
   class="bg-black/40 border-l-4 rounded-sm p-3 flex justify-between items-center shadow-inner mt-4"
-  [ngClass]="getStatusColor(studentData?.final_grade)"
+  [ngClass]="getStatusColor(getResultsFromStudentData('grade'))"
 >
   <div class="flex flex-col">
     <span class="text-[10px] text-gray-500">CALCULATED SCORE</span>
     <span class="text-2xl text-white font-bold tracking-tighter">
-      {{ formatNumber(studentData?.score) }}
+      {{ formatNumber(getResultsFromStudentData('score')) }}
     </span>
   </div>
   <div class="text-right">
     <span class="text-[10px] text-gray-500 block">FINAL GRADE</span>
-    <span class="text-3xl font-black" [ngClass]="getStatusColor(studentData?.final_grade)">
-      @if (typeof studentData?.final_grade === "string") {
-      {{ studentData?.final_grade | uppercase }}
-      } @else {
-      {{ studentData?.final_grade }}
-      }
+    <span class="text-3xl font-black" [ngClass]="getStatusColor(getResultsFromStudentData('grade'))">
+       {{ getResultsFromStudentData('grade') }}
     </span>
   </div>
 </div>

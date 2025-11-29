@@ -1,36 +1,66 @@
-<div class="min-h-screen flex justify-center items-center p-4 font-os">
+<div class="min-h-screen relative flex justify-center items-center p-4 font-os">
+  <div class="absolute top-4 right-4 z-10">
+    <p-selectbutton
+      [options]="languageOptions"
+      [(ngModel)]="selectedLanguage"
+      optionLabel="label"
+      optionValue="value"
+      aria-labelledby="basic"
+      styleClass="text-xs"
+    >
+      <ng-template let-item pTemplate="item">
+        <div class="flex items-center gap-1">
+          <img
+            [src]="'https://flagsapi.com/' + item.flagCode + '/flat/24.png'"
+            class="w-5 h-5"
+            alt="flag"
+          />
+          <span>{{ item.label }}</span>
+        </div>
+      </ng-template>
+    </p-selectbutton>
+  </div>
+
   <p-card class="min-w-[370px] w-full max-w-[450px] overflow-hidden">
     <ng-template pTemplate="header">
       <div
         class="text-lg font-semibold border border-[#333] bg-[#1e1e1e] text-green-400 shadow-2xl p-4 rounded-t-lg"
       >
-        @if (studentData?.student_id){ root@student:~/status/{{ studentData?.student_id }}$ } @else
-        { root@student:~/status$ }
+        @if (studentIdTitle){ root@student:~/status/{{ studentIdTitle }}$ } @else {
+        root@student:~/status$ }
       </div>
     </ng-template>
 
     @if (!studentData) {
-
     <div class="flex flex-col gap-4">
       <div class="text-gray-400 text-sm mb-2">> ./check_status --student-id</div>
       <p-floatlabel variant="on">
         <input
           pInputText
           id="sid"
-          [(ngModel)]="studentId"
+          (keyup.enter)="getGrades()"
+          [(ngModel)]="studentIdSearch"
+          (input)="showInputError = false"
+          [invalid]="showInputError"
           autocomplete="off"
           class="w-full bg-black text-green-400 border-gray-700 focus:border-green-500"
         />
         <label for="sid">Enter Student ID</label>
       </p-floatlabel>
+      @if (showInputError) {
+      <p-message severity="error" size="small" variant="simple"> {{ errorMsg }}</p-message>
+      }
       <p-button
         styleClass="w-full bg-green-700 border-green-600 hover:bg-green-600 text-white font-bold"
         (onClick)="getGrades()"
         label="Check"
       />
+      @if(searching){
+      <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" />
+      }
     </div>
     } @else {
-    <student-summary [studentData]="studentData" (onGoBack)="studentData = null"></student-summary>
+    <student-summary [studentData]="studentData" (onGoBack)="onReturn()"></student-summary>
     }
   </p-card>
 </div>
