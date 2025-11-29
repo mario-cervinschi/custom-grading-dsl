@@ -4,12 +4,14 @@ package evaluator
 
 import (
 	"ParserGen/parser"
+
 	"github.com/antlr4-go/antlr/v4"
 )
 
 type Variables map[string]interface{}
 
 type ExplanationData struct {
+	Variable              string
 	OriginalExpression    string
 	SubstitutedExpression string
 	Result                string

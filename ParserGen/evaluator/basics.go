@@ -30,6 +30,7 @@ func (v *Evaluator) VisitAssignmentExpression(ctx *parser.AssignmentExpressionCo
 	varName := ctx.IDENTIFIER().GetText()
 
 	val := v.Visit(ctx.Expression())
+	v.CurrentExplanation.Variable = varName
 
 	v.Memory[varName] = val
 	//switch v := val.(type) {

@@ -45,9 +45,9 @@ func (v *Evaluator) VisitNormal_operation(ctx *parser.Normal_operationContext) i
 	hasExplanation := ctx.EXPLAIN() != nil
 	hasDescription := ctx.STRING() != nil
 
-	if hasExplanation {
-		v.IsExplaining = true
+	v.IsExplaining = true
 
+	if hasExplanation {
 		originalExpr := ctx.Expression().GetText()
 
 		builder := &ExpressionBuilder{Memory: v.Memory}
@@ -57,23 +57,24 @@ func (v *Evaluator) VisitNormal_operation(ctx *parser.Normal_operationContext) i
 			OriginalExpression:    originalExpr,
 			SubstitutedExpression: substitutedExpr,
 		}
+	} else {
+		v.CurrentExplanation = &ExplanationData{}
 	}
 
 	result := v.Visit(ctx.Expression())
+	var resultStr string
+	switch val := result.(type) {
+	case float64:
+		resultStr = fmt.Sprintf("%.2f", val)
+	case bool:
+		resultStr = fmt.Sprintf("%v", val)
+	case string:
+		resultStr = val
+	default:
+		resultStr = fmt.Sprintf("%v", val)
+	}
 
 	if hasExplanation {
-		var resultStr string
-		switch val := result.(type) {
-		case float64:
-			resultStr = fmt.Sprintf("%.2f", val)
-		case bool:
-			resultStr = fmt.Sprintf("%v", val)
-		case string:
-			resultStr = val
-		default:
-			resultStr = fmt.Sprintf("%v", val)
-		}
-
 		if hasDescription {
 			stringDescription, err := strconv.Unquote(fmt.Sprintf("%v", ctx.STRING()))
 			if err != nil {
@@ -90,10 +91,12 @@ func (v *Evaluator) VisitNormal_operation(ctx *parser.Normal_operationContext) i
 		//fmt.Printf("  %s\n", resultStr)
 		//fmt.Printf("  %s\n", v.CurrentExplanation.Description)
 		//fmt.Println()
-
-		v.IsExplaining = false
-		v.CurrentExplanation = nil
+	} else {
+		v.CurrentExplanation.Result = resultStr
+		v.AllExplanations = append(v.AllExplanations, *v.CurrentExplanation)
 	}
+	v.IsExplaining = false
+	v.CurrentExplanation = nil
 
 	return result
 }

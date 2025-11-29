@@ -23,37 +23,26 @@ type SituatuionRequest struct {
 }
 
 type ExplanationStep struct {
-	Original    string  `json:"original"`
-	Substituted string  `json:"substituted"`
-	Result      string  `json:"result"`
-	Description *string `json:"description,omitempty"`
+	Original    string      `json:"original,omitempty"`
+	Substituted string      `json:"substituted,omitempty"`
+	Result      interface{} `json:"result,omitempty"`
+	Description string      `json:"description,omitempty"`
+}
+
+type Data struct {
+	Variable    string           `json:"variable"`
+	Result      interface{}      `json:"result"`
+	Explanation *ExplanationStep `json:"explanation,omitempty"`
+}
+
+type Error struct {
+	Error string `json:"error"`
 }
 
 type SituationResponse struct {
-	StudentID     string                 `json:"student_id"`
-	SemAttendance interface{}            `json:"sem_attendance"`
-	LabAttendance interface{}            `json:"lab_attendance"`
-	Attendance    interface{}            `json:"attendance"`
-	EW            interface{}            `json:"ew"`
-	RW            interface{}            `json:"rw"`
-	ESH           interface{}            `json:"esh"`
-	RSH           interface{}            `json:"rsh"`
-	EPR           interface{}            `json:"epr"`
-	RPR           interface{}            `json:"rpr"`
-	ETH           interface{}            `json:"eth"`
-	RTH           interface{}            `json:"rth"`
-	W             interface{}            `json:"w"`
-	SH            interface{}            `json:"sh"`
-	PR            interface{}            `json:"pr"`
-	TH            interface{}            `json:"th"`
-	FinalGrade    interface{}            `json:"final_grade"`
-	Score         interface{}            `json:"score"`
-	Details       map[string]interface{} `json:"details"`
-	Explanations  []ExplanationStep      `json:"explanations"`
-}
-
-type ErrorResponse struct {
-	Error string `json:"error"`
+	Success bool   `json:"success"`
+	Data    []Data `json:"data,omitempty"`
+	Error   *Error `json:"error,omitempty"`
 }
 
 func enableCors(next http.HandlerFunc) http.HandlerFunc {
@@ -97,7 +86,7 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ErrorResponse{Error: "Invalid JSON body"})
+		json.NewEncoder(w).Encode(Error{Error: "Invalid JSON body"})
 		return
 	}
 
@@ -106,7 +95,7 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 	studentData, found := fetchStudentData(req.StudentID)
 	if !found {
 		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(ErrorResponse{Error: "Student ID not found in database"})
+		json.NewEncoder(w).Encode(Error{Error: "Student ID not found in database"})
 		return
 	}
 
@@ -114,49 +103,42 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 		studentData["group"] = req.Group
 	}
 
-	finalMemory, explanations, err := runGradingLogic(studentData)
+	_, explanations, err := runGradingLogic(studentData)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(ErrorResponse{Error: "Calculation error"})
+		json.NewEncoder(w).Encode(Error{Error: "Calculation error"})
 		return
 	}
 
-	var explSteps []ExplanationStep
+	response := SituationResponse{}
+	var data []Data
+
 	for _, expl := range explanations {
-		exp := ExplanationStep{
-			Original:    expl.OriginalExpression,
-			Substituted: expl.SubstitutedExpression,
-			Result:      expl.Result,
-		}
+		if expl.Variable != "" {
+			data_cell := Data{
+				Variable: expl.Variable,
+				Result:   expl.Result,
+			}
 
-		if expl.Description != "" {
-			exp.Description = &expl.Description
-		}
+			if expl.OriginalExpression != "" && expl.SubstitutedExpression != "" {
+				step := ExplanationStep{}
 
-		explSteps = append(explSteps, exp)
+				step.Original = expl.OriginalExpression
+				step.Substituted = expl.SubstitutedExpression
+				step.Result = expl.Result
+
+				if expl.Description != "" {
+					step.Description = expl.Description
+				}
+
+				data_cell.Explanation = &step
+			}
+			data = append(data, data_cell)
+		}
 	}
 
-	response := SituationResponse{
-		StudentID:     req.StudentID,
-		FinalGrade:    finalMemory["grade"],
-		Score:         finalMemory["score"],
-		SemAttendance: finalMemory["sa"],
-		LabAttendance: finalMemory["la"],
-		Attendance:    finalMemory["attended"],
-		EW:            finalMemory["ew"],
-		RW:            finalMemory["rw"],
-		ESH:           finalMemory["esh"],
-		RSH:           finalMemory["rsh"],
-		EPR:           finalMemory["epr"],
-		RPR:           finalMemory["rpr"],
-		ETH:           finalMemory["eth"],
-		RTH:           finalMemory["rth"],
-		W:             finalMemory["w"],
-		SH:            finalMemory["sh"],
-		PR:            finalMemory["pr"],
-		TH:            finalMemory["th"],
-		Explanations:  explSteps,
-	}
+	response.Success = true
+	response.Data = data
 
 	json.NewEncoder(w).Encode(response)
 }
