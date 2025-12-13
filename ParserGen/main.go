@@ -30,7 +30,6 @@ type ExplanationStep struct {
 }
 
 type Data struct {
-	Variable    string           `json:"variable"`
 	Result      interface{}      `json:"result"`
 	Explanation *ExplanationStep `json:"explanation,omitempty"`
 }
@@ -40,9 +39,9 @@ type Error struct {
 }
 
 type SituationResponse struct {
-	Success bool   `json:"success"`
-	Data    []Data `json:"data,omitempty"`
-	Error   *Error `json:"error,omitempty"`
+	Success bool            `json:"success"`
+	Data    map[string]Data `json:"data,omitempty"`
+	Error   *Error          `json:"error,omitempty"`
 }
 
 func enableCors(next http.HandlerFunc) http.HandlerFunc {
@@ -103,7 +102,7 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 		studentData["group"] = req.Group
 	}
 
-	_, explanations, err := runGradingLogic(studentData)
+	memory, explanations, err := runGradingLogic(studentData)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(Error{Error: "Calculation error"})
@@ -111,13 +110,14 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := SituationResponse{}
-	var data []Data
+	var data = make(map[string]Data)
 
 	for _, expl := range explanations {
 		if expl.Variable != "" {
+			variable := expl.Variable
+
 			data_cell := Data{
-				Variable: expl.Variable,
-				Result:   expl.Result,
+				Result: memory[variable],
 			}
 
 			if expl.OriginalExpression != "" && expl.SubstitutedExpression != "" {
@@ -133,9 +133,20 @@ func gradeHandler(w http.ResponseWriter, r *http.Request) {
 
 				data_cell.Explanation = &step
 			}
-			data = append(data, data_cell)
+			data[variable] = data_cell
 		}
 	}
+
+	// ADD HERE EXTRA VARIABLE - VALUE PAIRS FROM memory
+
+	data["esh"] = Data{Result: memory["esh"]}
+	data["rsh"] = Data{Result: memory["rsh"]}
+	data["epr"] = Data{Result: memory["epr"]}
+	data["rpr"] = Data{Result: memory["rpr"]}
+	data["eth"] = Data{Result: memory["esh"]}
+	data["rth"] = Data{Result: memory["esh"]}
+
+	//
 
 	response.Success = true
 	response.Data = data

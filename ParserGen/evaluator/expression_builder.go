@@ -4,6 +4,7 @@ import (
 	"ParserGen/parser"
 	"fmt"
 	"strings"
+
 	"github.com/antlr4-go/antlr/v4"
 )
 
@@ -33,14 +34,14 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 	case *parser.AssignmentExpressionContext:
 		varName := node.IDENTIFIER().GetText()
 		expr := eb.BuildSubstituted(node.Expression())
-		return fmt.Sprintf("%s = %s", varName, expr)
+		return fmt.Sprintf("%s=%s", varName, expr)
 
 	case *parser.ConditionalExpressionContext:
 		cond := eb.BuildSubstituted(node.LogicalOrExpression())
 		if node.Expression(0) != nil && node.Expression(1) != nil {
 			trueExpr := eb.BuildSubstituted(node.Expression(0))
 			falseExpr := eb.BuildSubstituted(node.Expression(1))
-			return fmt.Sprintf("%s ? %s : %s", cond, trueExpr, falseExpr)
+			return fmt.Sprintf("%s?%s:%s", cond, trueExpr, falseExpr)
 		}
 		return cond
 
@@ -48,7 +49,7 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 		result := eb.BuildSubstituted(node.LogicalAndExpression(0))
 		for i := 1; i < len(node.AllLogicalAndExpression()); i++ {
 			right := eb.BuildSubstituted(node.LogicalAndExpression(i))
-			result = fmt.Sprintf("%s || %s", result, right)
+			result = fmt.Sprintf("%s||%s", result, right)
 		}
 		return result
 
@@ -56,7 +57,7 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 		result := eb.BuildSubstituted(node.EqualityExpression(0))
 		for i := 1; i < len(node.AllEqualityExpression()); i++ {
 			right := eb.BuildSubstituted(node.EqualityExpression(i))
-			result = fmt.Sprintf("%s && %s", result, right)
+			result = fmt.Sprintf("%s&&%s", result, right)
 		}
 		return result
 
@@ -65,7 +66,7 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 		for i := 1; i < len(node.AllRelationalExpression()); i++ {
 			op := node.GetChild(2*i - 1).(antlr.TerminalNode).GetText()
 			right := eb.BuildSubstituted(node.RelationalExpression(i))
-			result = fmt.Sprintf("%s %s %s", result, op, right)
+			result = fmt.Sprintf("%s%s%s", result, op, right)
 		}
 		return result
 
@@ -78,7 +79,7 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 			for i := 1; i < len(node.AllAdditiveExpression()); i++ {
 				op := node.GetChild(2*i - 1).(antlr.TerminalNode).GetText()
 				right := eb.BuildSubstituted(node.AdditiveExpression(i))
-				result = fmt.Sprintf("%s %s %s", result, op, right)
+				result = fmt.Sprintf("%s%s%s", result, op, right)
 			}
 			return result
 		}
@@ -89,7 +90,7 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 		for i := 1; i < len(node.AllMultiplicativeExpression()); i++ {
 			op := node.GetChild(2*i - 1).(antlr.TerminalNode).GetText()
 			right := eb.BuildSubstituted(node.MultiplicativeExpression(i))
-			result = fmt.Sprintf("%s %s %s", result, op, right)
+			result = fmt.Sprintf("%s%s%s", result, op, right)
 		}
 		return result
 
@@ -98,7 +99,7 @@ func (eb *ExpressionBuilder) BuildSubstituted(ctx antlr.ParseTree) string {
 		for i := 1; i < len(node.AllUnaryExpression()); i++ {
 			op := node.GetChild(2*i - 1).(antlr.TerminalNode).GetText()
 			right := eb.BuildSubstituted(node.UnaryExpression(i))
-			result = fmt.Sprintf("%s %s %s", result, op, right)
+			result = fmt.Sprintf("%s%s%s", result, op, right)
 		}
 		return result
 
