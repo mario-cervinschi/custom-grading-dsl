@@ -1,0 +1,25 @@
+{
+  "name": "tree-sitter-code-suggestion",
+  "version": "1.0.0",
+  "gypfile": true,
+  "description": "",
+  "main": "bindings/node",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tree-sitter",
+    "parser"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "node-gyp": "^12.1.0",
+    "tree-sitter-cli": "^0.26.3"
+  },
+  "dependencies": {
+    "node-addon-api": "^8.5.0",
+    "node-gyp-build": "^4.8.4"
+  }
+}
