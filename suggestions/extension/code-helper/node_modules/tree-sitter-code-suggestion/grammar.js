@@ -1,19 +1,25 @@
 const PREC = {
   ASSIGN: 1,
-  CONDITIONAL: 2,  // Adăugat
-  OR: 3,           // Incrementat
-  AND: 4,          // Incrementat
-  RELATIONAL: 5,   // Incrementat
-  ADD: 6,          // Incrementat
-  MUL: 7,          // Incrementat
-  UNARY: 8,        // Incrementat
-  CALL: 9,         // Incrementat
+  CONDITIONAL: 2,
+  OR: 3,
+  AND: 4,
+  RELATIONAL: 5,
+  ADD: 6,
+  MUL: 7,
+  UNARY: 8,
+  CALL: 9,
 };
 
 module.exports = grammar({
   name: 'codesuggestion',
 
-  extras: $ => [/\s/, /\r?\n/],
+  extras: $ => [/\s/],
+
+  word: $ => $.identifier,
+
+  conflicts: $ => [
+    [$.regex_expression, $.primary_expression],
+  ],
 
   rules: {
     source_file: $ => repeat(choice(
@@ -75,6 +81,7 @@ module.exports = grammar({
     simple_expression: $ => choice(
       $.iterate_expression,
       $.binary_expression,
+      $.regex_expression,
       $.unary_expression,
       $.primary_expression
     ),
@@ -95,7 +102,7 @@ module.exports = grammar({
     )),
 
     conditional_expression: $ => prec.right(PREC.CONDITIONAL, seq(
-      $.simple_expression,  // schimbat din binary_expression
+      $.simple_expression,
       '?',
       $.expression,
       ':',
@@ -127,16 +134,15 @@ module.exports = grammar({
       $.identifier,
       $.number,
       $.string,
-      $.regex_expression,
       seq('(', $.expression, ')'),
       $.function_call
     ),
 
-    regex_expression: $ => seq(
+    regex_expression: $ => prec(PREC.RELATIONAL, seq(
       $.identifier,
       choice('~', '!~'),
       $.string
-    ),
+    )),
 
     function_call: $ => prec(PREC.CALL, seq(
       $.function_name,
@@ -155,9 +161,9 @@ module.exports = grammar({
     constant_list: $ => seq($.constant, repeat(seq(',', $.constant))),
 
     constant: $ => choice(
-      'nothing','fraud','cancelled','invalid','alert',
-      'conflict','ungraded','obscured','absent','present',
-      'excused','toolow'
+      'nothing', 'fraud', 'cancelled', 'invalid', 'alert',
+      'conflict', 'ungraded', 'obscured', 'absent', 'present',
+      'excused', 'toolow'
     ),
 
     identifier: _ => /[a-zA-Z][a-zA-Z0-9_]*/,

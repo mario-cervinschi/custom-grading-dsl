@@ -1,0 +1,14 @@
+<div class="flex flex-col gap-4 p-2">
+  <input
+    pInputText
+    [(ngModel)]="fileName"
+    placeholder="Name..."
+    class="w-full bg-black text-white border-gray-600"
+  />
+  <button
+    (click)="create()"
+    class="w-full bg-green-600 py-2 rounded text-white font-bold hover:bg-green-500"
+  >
+    Create
+  </button>
+</div>

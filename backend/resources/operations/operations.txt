@@ -1,0 +1,37 @@
+apply x => x == absent ? 0
+                       : x in [present, excused] ? 1 : x
+   to sem1, sem2, sem3, sem4, sem5, sem6, sem7,
+      lab1, lab2, lab3, lab4, lab5, lab6, lab7, lab8, lab9, lab10, lab11, lab12, lab13, lab14;
+
+apply x => x == absent ? 0 : x
+   to ew01, ew02, ew03, ew04, ew05, ew06, ew07, ew08, ew09, ew10,
+      rw01, rw02, rwx03, rw04, rw05, rw06, rw07, rw08, rw09, rw10,
+      tc, tgsa;
+
+explain sa = sem1 + sem2 + sem3 + sem4 + sem5 + sem6 + sem7;
+explain  la = lab1 + lab2 + lab3 + lab4 + lab5 + lab6 + lab7 + lab8 + lab9 + lab10 + lab11 + lab12 + lab13 + lab14;
+
+explain  attended = sa >= (group ~ "^[92]1" ? 5 : 4) && la >= (group ~ "^[92]1" ? 12 : 10);
+
+explain  ew = (ew01 + ew02 + ew03 + ew04 + ew05 + ew06 + ew07 + ew08 + ew09 + ew10)/10;
+explain  rw = (rw01 + rw02 + rw03 + rw04 + rw05 + rw06 + rw07 + rw08 + rw09 + rw10)/10;
+
+explain  w  = max(ew, rw);
+explain  sh = max(esh, rsh);
+explain  pr = max(epr, rpr);
+explain  th = max(eth, rth);
+
+explain  score = 1 + 0.05*tc + 0.05*tgsa + 0.3*w + 0.2*sh + 0.15*pr + 0.15*th;
+
+explain  components_passed = w >= 5 && sh >= 5 && pr >= 5;
+
+apply x => x < 4.5 ? toolow : x
+   to w, sh, pr, th, score;
+
+when b exists explain score = score + 0.1*b > 10 ? 10 : score + 0.1*b;
+explain  score = score == toolow ? 4 : score;
+
+explain  grade = attended ? (components_passed ? min(round(score), 10) : toolow) : absent;
+
+when fgrade exists explain grade = fgrade, "(assigned explicitly by the examiner, overriding the calculated grade above)";
+ 

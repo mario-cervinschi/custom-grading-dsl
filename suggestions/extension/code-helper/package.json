@@ -9,9 +9,24 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": ["*"],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "codesuggestion",
+        "aliases": ["Code Suggestion", "codesuggestion"],
+        "extensions": [".ops"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "codesuggestion",
+        "scopeName": "source.codesuggestion",
+        "path": "./syntaxes/codesuggestion.tmLanguage.json"
+      }
+    ],
     "commands": [
       {
         "command": "code-helper.helloWorld",

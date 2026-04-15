@@ -1,0 +1,22 @@
+{
+  "name": "ws-server",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "start": "node ./out/index.js"
+  },
+  "dependencies": {
+    "vscode-ws-jsonrpc": "^3.5.0",
+    "ws": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.x",
+    "@types/ws": "^8.0.0",
+    "typescript": "^5.9.3"
+  }
+}

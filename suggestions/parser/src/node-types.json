@@ -259,10 +259,6 @@
           "named": true
         },
         {
-          "type": "regex_expression",
-          "named": true
-        },
-        {
           "type": "string",
           "named": true
         }
@@ -306,6 +302,10 @@
         },
         {
           "type": "primary_expression",
+          "named": true
+        },
+        {
+          "type": "regex_expression",
           "named": true
         },
         {

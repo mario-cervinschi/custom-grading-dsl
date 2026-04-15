@@ -1,0 +1,75 @@
+package main
+
+type SituatuionRequest struct {
+	StudentID string `json:"student_id"`
+	Group     string `json:"group"`
+}
+
+type ReadFileRequest struct {
+	Type string `json:"type"`
+	Name string `json:"name"`
+}
+
+type CreateFileRequest struct {
+	FileName string `json:"file_name"`
+	Content  string `json:"content,omitempty"`
+}
+
+type EvaluateAllRequest struct {
+	OperationsFile string `json:"operations_file"`
+	DataFile       string `json:"data_file"`
+}
+
+type DataResult struct {
+	ID   string          `json:"id"`
+	Data map[string]Data `json:"data"`
+}
+
+type EvaluateAllResponse struct {
+	Success bool         `json:"success"`
+	Results []DataResult `json:"results"`
+	Error   *Error       `json:"error,omitempty"`
+}
+
+type SaveFileRequest struct {
+	Type    string `json:"type"`
+	Name    string `json:"name"`
+	Content string `json:"content"`
+}
+
+type ReadFileSpecificRequest struct {
+	Name string `json:"name"`
+}
+
+type ColumnDef struct {
+	Field  string `json:"field"`
+	Header string `json:"header"`
+}
+
+type TableDataResponse struct {
+	Success bool                     `json:"success"`
+	Columns []ColumnDef              `json:"columns"`
+	Data    []map[string]interface{} `json:"data"`
+}
+
+type ExplanationStep struct {
+	Original    string      `json:"original,omitempty"`
+	Substituted string      `json:"substituted,omitempty"`
+	Result      interface{} `json:"result,omitempty"`
+	Description string      `json:"description,omitempty"`
+}
+
+type Data struct {
+	Result      interface{}      `json:"result"`
+	Explanation *ExplanationStep `json:"explanation,omitempty"`
+}
+
+type Error struct {
+	Error string `json:"error"`
+}
+
+type SituationResponse struct {
+	Success bool            `json:"success"`
+	Data    map[string]Data `json:"data,omitempty"`
+	Error   *Error          `json:"error,omitempty"`
+}

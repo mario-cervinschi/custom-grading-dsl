@@ -1,6 +1,7 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "codesuggestion",
+  "word": "identifier",
   "rules": {
     "source_file": {
       "type": "REPEAT",
@@ -207,6 +208,10 @@
         {
           "type": "SYMBOL",
           "name": "binary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "regex_expression"
         },
         {
           "type": "SYMBOL",
@@ -638,10 +643,6 @@
           "name": "string"
         },
         {
-          "type": "SYMBOL",
-          "name": "regex_expression"
-        },
-        {
           "type": "SEQ",
           "members": [
             {
@@ -665,30 +666,34 @@
       ]
     },
     "regex_expression": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "identifier"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "~"
-            },
-            {
-              "type": "STRING",
-              "value": "!~"
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "string"
-        }
-      ]
+      "type": "PREC",
+      "value": 5,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "identifier"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "~"
+              },
+              {
+                "type": "STRING",
+                "value": "!~"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string"
+          }
+        ]
+      }
     },
     "function_call": {
       "type": "PREC",
@@ -843,13 +848,14 @@
     {
       "type": "PATTERN",
       "value": "\\s"
-    },
-    {
-      "type": "PATTERN",
-      "value": "\\r?\\n"
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    [
+      "regex_expression",
+      "primary_expression"
+    ]
+  ],
   "precedences": [],
   "externals": [],
   "inline": [],
