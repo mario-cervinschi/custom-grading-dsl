@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>ExprLexer — Token Stream</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 32px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    p {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <svg viewBox="0 0 930 230" width="930" height="230" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+      </marker>
+      <filter id="sh">
+        <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000018" />
+      </filter>
+    </defs>
+
+    <!-- Background -->
+    <rect width="930" height="230" fill="#f8fafc" rx="12" />
+
+    <!-- ── Row label: INPUT ── -->
+    <text x="30" y="82" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#94a3b8"
+      letter-spacing="0.08em">INPUT</text>
+
+    <!-- Raw input string box -->
+    <rect x="30" y="90" width="220" height="42" rx="8" fill="#1e293b" filter="url(#sh)" />
+    <text x="140" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13"
+      fill="#e2e8f0">APPLY x =&gt; x + 1 TO lab;</text>
+
+    <!-- Arrow: input → lexer -->
+    <line x1="252" y1="111" x2="308" y2="111" stroke="#475569" stroke-width="2" marker-end="url(#arr)" />
+
+    <!-- ExprLexer block -->
+    <rect x="310" y="72" width="130" height="78" rx="10" fill="#0f172a" stroke="#3b82f6" stroke-width="2"
+      filter="url(#sh)" />
+    <text x="375" y="101" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700"
+      fill="#3b82f6">ExprLexer</text>
+    <text x="375" y="117" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5"
+      fill="#64748b">antlr.InputStream</text>
+    <text x="375" y="131" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#64748b">→
+      CommonTokenStream</text>
+
+    <!-- Arrow: lexer → tokens -->
+    <line x1="442" y1="111" x2="494" y2="111" stroke="#475569" stroke-width="2" marker-end="url(#arr)" />
+
+    <!-- TOKEN STREAM label -->
+    <text x="496" y="82" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#94a3b8"
+      letter-spacing="0.08em">TOKEN STREAM</text>
+
+    <!-- Row 1 of token pairs -->
+    <text x="496" y="108" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[APPLY]</text>
+    <text x="566" y="108" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[IDENTIFIER: x]</text>
+    <text x="692" y="108" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[LOP: =&gt;]</text>
+    <text x="778" y="108" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[IDENTIFIER: x]</text>
+
+    <!-- Row 2 of token pairs -->
+    <text x="496" y="140" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[ADD: +]</text>
+    <text x="570" y="140" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[INT: 1]</text>
+    <text x="636" y="140" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[TO]</text>
+    <text x="672" y="140" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[IDENTIFIER: lab]</text>
+    <text x="816" y="140" font-family="JetBrains Mono,monospace" font-size="12" fill="#0f172a">[SEMICOLON]</text>
+
+    <!-- note -->
+  </svg>
+</body>
+
+</html>

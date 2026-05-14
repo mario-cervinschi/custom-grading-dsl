@@ -120,6 +120,17 @@ export class LspService implements OnDestroy {
     }
   }
 
+  // check syntax errors via tree-sitter on server
+  async validate(text: string): Promise<{ valid: boolean; errors: { line: number; col: number; msg: string }[] }> {
+    if (!this.initialized()) return { valid: true, errors: [] };
+    try {
+      return await this.request('custom/validate', { text });
+    } catch (e) {
+      console.error('Validation error:', e);
+      return { valid: true, errors: [] };
+    }
+  }
+
   private initialize(): Promise<any> {
     return this.request('initialize', {
       processId: null,

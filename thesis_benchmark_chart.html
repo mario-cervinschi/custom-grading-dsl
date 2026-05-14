@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Execution Time Benchmark</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    p {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 12px;
+      text-align: center;
+      max-width: 900px;
+    }
+  </style>
+</head>
+
+<body>
+  <svg viewBox="0 0 900 520" width="900" height="520" xmlns="http://www.w3.org/2000/svg">
+
+    <rect width="900" height="520" fill="#f8fafc" rx="12" />
+
+    <!-- Chart area -->
+    <rect x="90" y="60" width="770" height="380" fill="white" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Y-axis label -->
+    <text x="18" y="250" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" font-weight="600"
+      fill="#475569" transform="rotate(-90 18 250)">Time (ms)</text>
+
+    <!-- Y gridlines + labels: 0, 30k, 60k, 90k, 120k -->
+    <!-- 0 → y=440 -->
+    <text x="82" y="444" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="14" fill="#64748b">0</text>
+    <!-- 30k → y=345 -->
+    <line x1="90" y1="345" x2="860" y2="345" stroke="#f1f5f9" stroke-width="1" />
+    <text x="82" y="349" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="14" fill="#64748b">30
+      000</text>
+    <!-- 60k → y=250 -->
+    <line x1="90" y1="250" x2="860" y2="250" stroke="#f1f5f9" stroke-width="1" />
+    <text x="82" y="254" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="14" fill="#64748b">60
+      000</text>
+    <!-- 90k → y=155 -->
+    <line x1="90" y1="155" x2="860" y2="155" stroke="#f1f5f9" stroke-width="1" />
+    <text x="82" y="159" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="14" fill="#64748b">90
+      000</text>
+    <!-- 120k → y=60 -->
+    <text x="82" y="64" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="14" fill="#64748b">120
+      000</text>
+
+    <!-- Axes -->
+    <line x1="90" y1="60" x2="90" y2="440" stroke="#334155" stroke-width="1.6" />
+    <line x1="90" y1="440" x2="860" y2="440" stroke="#334155" stroke-width="1.6" />
+
+    <!-- ═══════════════════════════════════════
+       GROUP 1 — Normal (30 records)
+       bars at x=152, 208, 264
+       scale: 380/120000 = 0.003167 px/ms
+       min bar height = 3px so they're visible
+       ═══════════════════════════════════════ -->
+
+    <!-- Go Seq 39ms: h=3(min), y=437 -->
+    <rect x="152" y="437" width="50" height="3" rx="1" fill="#1e40af" />
+    <text x="177" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#1e40af">39ms</text>
+
+    <!-- Go Conc 9.7ms: h=3(min), y=437 -->
+    <rect x="208" y="437" width="50" height="3" rx="1" fill="#15803d" />
+    <text x="233" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#15803d">9.7ms</text>
+
+    <!-- Python 1.5ms: h=3(min), y=437 -->
+    <rect x="264" y="437" width="50" height="3" rx="1" fill="#b45309" />
+    <text x="289" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#b45309">1.5ms</text>
+
+    <!-- Group label -->
+    <text x="233" y="462" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="600"
+      fill="#334155">Normal</text>
+    <text x="233" y="478" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#94a3b8">(30
+      records)</text>
+
+    <!-- ═══════════════════════════════════════
+       GROUP 2 — 10,000 records
+       bars at x=394, 450, 506
+       ═══════════════════════════════════════ -->
+
+    <!-- Go Seq 11002ms: h=35, y=405 -->
+    <rect x="394" y="405" width="50" height="35" rx="2" fill="#1e40af" />
+    <text x="419" y="400" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#1e40af">11 002ms</text>
+
+    <!-- Go Conc 2526ms: h=8, y=432 -->
+    <rect x="450" y="432" width="50" height="8" rx="1" fill="#15803d" />
+    <text x="475" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#15803d">2 526ms</text>
+
+    <!-- Python 628ms: h=3(min), y=437 -->
+    <rect x="506" y="438" width="50" height="2" rx="1" fill="#b45309" />
+    <text x="531" y="433" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#b45309">629ms</text>
+
+    <!-- Group label -->
+    <text x="475" y="462" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="600"
+      fill="#334155">10 000</text>
+    <text x="475" y="478" text-anchor="middle" font-family="Inter,sans-serif" font-size="11"
+      fill="#94a3b8">(records)</text>
+
+    <!-- ═══════════════════════════════════════
+       GROUP 3 — 100,000 records
+       bars at x=636, 692, 748
+       ═══════════════════════════════════════ -->
+
+    <!-- Go Seq 110589ms: h=350, y=90 -->
+    <rect x="636" y="90" width="50" height="350" rx="2" fill="#1e40af" />
+    <text x="661" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#1e40af">110 589ms</text>
+
+    <!-- Go Conc 27785ms: h=88, y=352 -->
+    <rect x="692" y="352" width="50" height="88" rx="2" fill="#15803d" />
+    <text x="717" y="347" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#15803d">27 785ms</text>
+
+    <!-- Python 6738ms: h=21, y=419 -->
+    <rect x="748" y="419" width="50" height="21" rx="1" fill="#b45309" />
+    <text x="773" y="414" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500"
+      fill="#b45309">6 738ms</text>
+
+    <!-- Group label -->
+    <text x="717" y="462" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="600"
+      fill="#334155">100 000</text>
+    <text x="717" y="478" text-anchor="middle" font-family="Inter,sans-serif" font-size="13"
+      fill="#94a3b8">(records)</text>
+    <text x="717" y="493" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#94a3b8"
+      font-style="italic">* Go Seq: avg. of 10 runs</text>
+
+    <!-- ── LEGEND ── -->
+    <rect x="90" y="490" width="440" height="26" rx="5" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <rect x="102" y="497" width="14" height="14" rx="2" fill="#1e40af" />
+    <text x="120" y="509" font-family="Inter,sans-serif" font-size="12" fill="#334155">Go Sequential</text>
+    <rect x="230" y="497" width="14" height="14" rx="2" fill="#15803d" />
+    <text x="248" y="509" font-family="Inter,sans-serif" font-size="12" fill="#334155">Go Concurrent</text>
+    <rect x="358" y="497" width="14" height="14" rx="2" fill="#b45309" />
+    <text x="376" y="509" font-family="Inter,sans-serif" font-size="12" fill="#334155">Python (sequential)</text>
+
+  </svg>
+</body>
+
+</html>

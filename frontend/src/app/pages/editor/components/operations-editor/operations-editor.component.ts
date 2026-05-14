@@ -24,6 +24,8 @@ export class OperationsEditorComponent {
   protected readonly operationsFileSelected = signal('No file');
   protected readonly editorContent = signal('');
   private readonly editorContent$ = toObservable(this.editorContent);
+  private editorInstance: any = null;
+  private lastValidation: { valid: boolean; errors: any[] } = { valid: true, errors: [] };
 
   protected ref: DynamicDialogRef | null = null;
   protected readonly EDITOR_OPTIONS = {
@@ -58,6 +60,7 @@ export class OperationsEditorComponent {
   }
 
   async onEditorInit(editor: any): Promise<void> {
+    this.editorInstance = editor;
     const monaco = (window as any).monaco;
     monaco.languages.register({ id: 'codesuggestion' });
 
@@ -95,6 +98,27 @@ export class OperationsEditorComponent {
 
   onContentChange(value: string): void {
     this.lspClient.updateDocument(value);
+    this.runValidation(value);
+  }
+
+  private async runValidation(text: string) {
+    if (!this.editorInstance) return;
+    const monaco = (window as any).monaco;
+    const model = this.editorInstance.getModel();
+    if (!model) return;
+
+    const result = await this.lspClient.validate(text);
+    this.lastValidation = result;
+    const markers = result.errors.map((e: any) => ({
+      severity: monaco.MarkerSeverity.Error,
+      message: e.msg,
+      startLineNumber: e.line + 1,
+      startColumn: e.col + 1,
+      endLineNumber: e.endLine + 1,
+      endColumn: e.endCol + 1,
+    }));
+    monaco.editor.setModelMarkers(model, 'dsl-validation', markers);
+    this.previewService.hasSyntaxErrors.set(result.errors.length > 0);
   }
 
   openNewFileDialog() {
@@ -158,7 +182,17 @@ export class OperationsEditorComponent {
       });
   }
 
-  onSave() {
+  async onSave() {
+    if (!this.lastValidation.valid) {
+      const first = this.lastValidation.errors[0];
+      this.showToast(
+        'error',
+        'Syntax Error',
+        `Line ${first.line + 1}, col ${first.col + 1}: ${first.msg}`,
+      );
+      // return;
+    }
+
     this.editorService
       .saveFileContent('operations', this.operationsFileSelected(), this.editorContent())
       .pipe(

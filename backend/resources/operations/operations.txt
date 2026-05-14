@@ -31,7 +31,6 @@ apply x => x < 4.5 ? toolow : x
 when b exists explain score = score + 0.1*b > 10 ? 10 : score + 0.1*b;
 explain  score = score == toolow ? 4 : score;
 
-explain  grade = attended ? (components_passed ? min(round(score), 10) : toolow) : absent;
+explain  grade = attended ? (components_passed ? min(round(score), 10) : toolow) : absent , "observation";
 
 when fgrade exists explain grade = fgrade, "(assigned explicitly by the examiner, overriding the calculated grade above)";
- 

@@ -14,7 +14,7 @@ export interface VariableData {
 
 export interface Result {
   id: string;
-  data: Record<string, VariableData>; 
+  data: Record<string, VariableData>;
 }
 
 export interface EvaluationResponse {
@@ -28,10 +28,11 @@ export interface EvaluationResponse {
 export class PreviewService {
   operationsFile = signal<string | null>(null);
   dataFile = signal<string | null>(null);
-  
-  preview = signal<EvaluationResponse | null>(null); 
 
-  refreshTrigger = signal<number>(0); 
+  preview = signal<EvaluationResponse | null>(null);
+
+  refreshTrigger = signal<number>(0);
+  hasSyntaxErrors = signal<boolean>(false);
 
   triggerRefresh() {
     this.refreshTrigger.update(val => val + 1);

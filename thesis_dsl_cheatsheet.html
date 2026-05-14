@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>DSL Syntax Cheat Sheet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 32px;
+    }
+    .caption {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 14px;
+      letter-spacing: 0.02em;
+    }
+    table {
+      width: 100%;
+      max-width: 980px;
+      border-collapse: collapse;
+      font-size: 13px;
+      color: #1e293b;
+    }
+    thead tr {
+      background: #1e293b;
+    }
+    thead th {
+      padding: 13px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f1f5f9;
+    }
+    thead th:nth-child(1) { width: 18%; }
+    thead th:nth-child(2) { width: 22%; }
+    thead th:nth-child(3) { width: 60%; }
+
+    tbody tr { border-bottom: 1px solid #e2e8f0; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    tbody tr:hover { background: #eff6ff; }
+
+    td { padding: 11px 16px; vertical-align: top; line-height: 1.5; }
+
+    /* Category badge */
+    .cat {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .cat-iter    { background: #dbeafe; color: #1e40af; }
+    .cat-cond    { background: #f3e8ff; color: #6b21a8; }
+    .cat-assign  { background: #dcfce7; color: #14532d; }
+    .cat-arith   { background: #fef9c3; color: #713f12; }
+    .cat-compare { background: #ffedd5; color: #7c2d12; }
+    .cat-logical { background: #fce7f3; color: #831843; }
+    .cat-regex   { background: #e0f2fe; color: #0c4a6e; }
+    .cat-func    { background: #d1fae5; color: #064e3b; }
+    .cat-const   { background: #f1f5f9; color: #334155; }
+    .cat-punc    { background: #f5f3ff; color: #4c1d95; }
+    .cat-literal { background: #fff7ed; color: #7c2d12; }
+
+    /* Token / keyword code pill -->
+    .tok {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: #0f172a;
+    }
+    .tok span {
+      display: inline-block;
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin: 1px 2px 1px 0;
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+
+    /* Example code block */
+    .ex {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 12px;
+      line-height: 1.7;
+      display: block;
+      margin-top: 2px;
+    }
+    /* Syntax colouring inside .ex -->
+    .kw  { color: #7dd3fc; font-weight: 600; } /* keywords */
+    .op  { color: #f9a8d4; }                   /* operators */
+    .id  { color: #86efac; }                   /* identifiers */
+    .num { color: #fcd34d; }                   /* numbers */
+    .str { color: #fca5a5; }                   /* strings */
+    .con { color: #c4b5fd; }                   /* constants */
+    .pun { color: #94a3b8; }                   /* punctuation */
+  </style>
+</head>
+<body>
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Keyword / Token</th>
+      <th>Usage Example</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- ── ITERATION ── -->
+    <tr>
+      <td><span class="cat cat-iter">Iteration</span></td>
+      <td class="tok"><span>APPLY</span> <span>TO</span></td>
+      <td>
+        Apply a lambda transformation to a list of variables.
+        <code class="ex"><span class="kw">APPLY</span> <span class="id">x</span> <span class="op">=&gt;</span> <span class="id">x</span> <span class="op">/</span> <span class="num">2</span> <span class="kw">TO</span> <span class="id">lab1</span><span class="pun">,</span> <span class="id">lab2</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-iter">Iteration</span></td>
+      <td class="tok"><span>LOP</span> <code style="font-size:12px">=&gt;</code></td>
+      <td>
+        Lambda separator — binds the parameter to its body in an <code style="font-family:monospace">APPLY</code> expression.
+        <code class="ex"><span class="kw">APPLY</span> <span class="id">grade</span> <span class="op">=&gt;</span> <span class="id">grade</span> <span class="op">*</span> <span class="num">0.8</span> <span class="kw">TO</span> <span class="id">exam</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+
+    <!-- ── CONDITIONAL ── -->
+    <tr>
+      <td><span class="cat cat-cond">Conditional</span></td>
+      <td class="tok"><span>WHEN</span> <span>EXISTS</span></td>
+      <td>
+        Guard: executes the following statement only if all listed variables are present in the data row.
+        <code class="ex"><span class="kw">WHEN</span> <span class="id">lab1</span><span class="pun">,</span> <span class="id">lab2</span> <span class="kw">EXISTS</span> <span class="kw">EXPLAIN</span> <span class="id">bonus</span> <span class="op">=</span> <span class="id">lab1</span> <span class="op">+</span> <span class="id">lab2</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-cond">Conditional</span></td>
+      <td class="tok"><span>ASK</span> <code style="font-size:12px">?</code> <span>COLON</span> <code style="font-size:12px">:</code></td>
+      <td>
+        Ternary (inline if-else) operator — <em>condition</em> <code>?</code> <em>then</em> <code>:</code> <em>else</em>.
+        <code class="ex"><span class="id">score</span> <span class="op">&gt;</span> <span class="num">50</span> <span class="op">?</span> <span class="str">"pass"</span> <span class="op">:</span> <span class="str">"fail"</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-cond">Conditional</span></td>
+      <td class="tok"><span>IN</span> <span>[ ]</span></td>
+      <td>
+        Membership test — checks whether an identifier's value matches one of the listed constants.
+        <code class="ex"><span class="id">status</span> <span class="kw">IN</span> <span class="pun">[</span><span class="con">absent</span><span class="pun">,</span> <span class="con">excused</span><span class="pun">]</span> <span class="op">?</span> <span class="num">0</span> <span class="op">:</span> <span class="id">lab1</span></code>
+      </td>
+    </tr>
+
+    <!-- ── EXPLAIN / ANNOTATE ── -->
+    <tr>
+      <td><span class="cat cat-assign">Annotation</span></td>
+      <td class="tok"><span>EXPLAIN</span></td>
+      <td>
+        Marks a statement for explanation output: records the original expression, substituted values, and result.
+        <code class="ex"><span class="kw">EXPLAIN</span> <span class="id">final</span> <span class="op">=</span> <span class="id">exam</span> <span class="op">*</span> <span class="num">0.6</span> <span class="op">+</span> <span class="id">lab</span> <span class="op">*</span> <span class="num">0.4</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-assign">Annotation</span></td>
+      <td class="tok"><span>EXPLAIN</span> … <code style="font-size:12px">,</code> <span>STRING</span></td>
+      <td>
+        Attaches a human-readable description to an explanation entry.
+        <code class="ex"><span class="kw">EXPLAIN</span> <span class="id">final</span> <span class="op">=</span> <span class="id">exam</span> <span class="op">*</span> <span class="num">0.6</span><span class="pun">,</span> <span class="str">"Weighted exam score"</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+
+    <!-- ── ASSIGNMENT ── -->
+    <tr>
+      <td><span class="cat cat-assign">Assignment</span></td>
+      <td class="tok"><span>ASSIGN</span> <code style="font-size:12px">=</code></td>
+      <td>
+        Assigns the result of an expression to an identifier in the evaluation memory.
+        <code class="ex"><span class="id">bonus</span> <span class="op">=</span> <span class="id">lab1</span> <span class="op">+</span> <span class="id">lab2</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+
+    <!-- ── ARITHMETIC ── -->
+    <tr>
+      <td><span class="cat cat-arith">Arithmetic</span></td>
+      <td class="tok"><span>ADD</span> <code>+</code> &nbsp;<span>SUB</span> <code>-</code> &nbsp;<span>MUL</span> <code>*</code> &nbsp;<span>DIV</span> <code>/</code></td>
+      <td>
+        Standard arithmetic operators; respect operator precedence (<code>*</code> / <code>/</code> before <code>+</code> / <code>-</code>).
+        <code class="ex"><span class="id">avg</span> <span class="op">=</span> <span class="pun">(</span><span class="id">lab1</span> <span class="op">+</span> <span class="id">lab2</span><span class="pun">)</span> <span class="op">/</span> <span class="num">2</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+
+    <!-- ── COMPARISON ── -->
+    <tr>
+      <td><span class="cat cat-compare">Comparison</span></td>
+      <td class="tok">
+        <span>EQ</span> <code>==</code>
+        <span>NE</span> <code>!=</code>
+        <span>GT</span> <code>&gt;</code>
+        <span>GE</span> <code>&gt;=</code>
+        <span>LT</span> <code>&lt;</code>
+        <span>LE</span> <code>&lt;=</code>
+      </td>
+      <td>
+        Relational operators; produce a boolean result used in conditionals.
+        <code class="ex"><span class="id">exam</span> <span class="op">&gt;=</span> <span class="num">50</span> <span class="op">?</span> <span class="str">"pass"</span> <span class="op">:</span> <span class="str">"fail"</span></code>
+      </td>
+    </tr>
+
+    <!-- ── LOGICAL ── -->
+    <tr>
+      <td><span class="cat cat-logical">Logical</span></td>
+      <td class="tok"><span>AND</span> <code>&amp;&amp;</code> &nbsp;<span>OR</span> <code>||</code> &nbsp;<span>NOT</span> <code>!</code></td>
+      <td>
+        Boolean connectives; <code>AND</code> binds tighter than <code>OR</code>; <code>NOT</code> is a unary prefix.
+        <code class="ex"><span class="id">lab1</span> <span class="op">&gt;</span> <span class="num">0</span> <span class="op">&amp;&amp;</span> <span class="id">lab2</span> <span class="op">&gt;</span> <span class="num">0</span> <span class="op">?</span> <span class="id">avg</span> <span class="op">:</span> <span class="num">0</span></code>
+      </td>
+    </tr>
+
+    <!-- ── REGEX ── -->
+    <tr>
+      <td><span class="cat cat-regex">Regex Match</span></td>
+      <td class="tok"><span>MA</span> <code>~</code> &nbsp;<span>NM</span> <code>!~</code></td>
+      <td>
+        Pattern match (<code>~</code>) and negative match (<code>!~</code>) against a string literal.
+        <code class="ex"><span class="id">comment</span> <span class="op">~</span> <span class="str">"^ok.*"</span> <span class="op">?</span> <span class="num">10</span> <span class="op">:</span> <span class="num">0</span></code>
+      </td>
+    </tr>
+
+    <!-- ── BUILT-IN FUNCTIONS ── -->
+    <tr>
+      <td><span class="cat cat-func">Built-in Function</span></td>
+      <td class="tok"><span>MAX</span></td>
+      <td>
+        Returns the maximum of its arguments.
+        <code class="ex"><span class="id">top</span> <span class="op">=</span> <span class="kw">MAX</span><span class="pun">(</span><span class="id">lab1</span><span class="pun">,</span> <span class="id">lab2</span><span class="pun">,</span> <span class="id">lab3</span><span class="pun">);</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-func">Built-in Function</span></td>
+      <td class="tok"><span>MIN</span></td>
+      <td>
+        Returns the minimum of its arguments.
+        <code class="ex"><span class="id">floor</span> <span class="op">=</span> <span class="kw">MIN</span><span class="pun">(</span><span class="id">exam</span><span class="pun">,</span> <span class="num">100</span><span class="pun">);</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-func">Built-in Function</span></td>
+      <td class="tok"><span>ROUND</span></td>
+      <td>
+        Rounds a numeric expression to the nearest integer.
+        <code class="ex"><span class="id">final</span> <span class="op">=</span> <span class="kw">ROUND</span><span class="pun">(</span><span class="id">avg</span> <span class="op">*</span> <span class="num">1.1</span><span class="pun">);</span></code>
+      </td>
+    </tr>
+
+    <!-- ── STATUS CONSTANTS ── -->
+    <tr>
+      <td><span class="cat cat-const">Status Constant</span></td>
+      <td class="tok">
+        <span>absent</span> <span>present</span> <span>excused</span>
+      </td>
+      <td>
+        Attendance-related sentinel values for a student record field.
+        <code class="ex"><span class="id">att</span> <span class="kw">IN</span> <span class="pun">[</span><span class="con">absent</span><span class="pun">,</span> <span class="con">excused</span><span class="pun">]</span> <span class="op">?</span> <span class="num">0</span> <span class="op">:</span> <span class="id">lab1</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-const">Status Constant</span></td>
+      <td class="tok">
+        <span>nothing</span> <span>ungraded</span> <span>toolow</span>
+      </td>
+      <td>
+        Grade-state sentinels indicating a missing, unprocessed, or below-threshold result.
+        <code class="ex"><span class="id">lab1</span> <span class="op">==</span> <span class="con">nothing</span> <span class="op">?</span> <span class="num">0</span> <span class="op">:</span> <span class="id">lab1</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-const">Status Constant</span></td>
+      <td class="tok">
+        <span>fraud</span> <span>cancelled</span> <span>invalid</span> <span>alert</span> <span>conflict</span> <span>obscured</span>
+      </td>
+      <td>
+        Integrity-related sentinels flagging anomalous submission states.
+        <code class="ex"><span class="id">sub</span> <span class="kw">IN</span> <span class="pun">[</span><span class="con">fraud</span><span class="pun">,</span> <span class="con">cancelled</span><span class="pun">]</span> <span class="op">?</span> <span class="num">0</span> <span class="op">:</span> <span class="id">score</span></code>
+      </td>
+    </tr>
+
+    <!-- ── LITERALS ── -->
+    <tr>
+      <td><span class="cat cat-literal">Literal</span></td>
+      <td class="tok"><span>INT</span> &nbsp;<span>FLOAT</span></td>
+      <td>
+        Numeric literals; <code>FLOAT</code> requires a decimal point.
+        <code class="ex"><span class="id">scaled</span> <span class="op">=</span> <span class="id">lab1</span> <span class="op">*</span> <span class="num">0.75</span> <span class="op">+</span> <span class="num">5</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-literal">Literal</span></td>
+      <td class="tok"><span>STRING</span></td>
+      <td>
+        Double-quoted text; used as regex patterns or description annotations.
+        <code class="ex"><span class="kw">EXPLAIN</span> <span class="id">r</span> <span class="op">=</span> <span class="id">exam</span><span class="pun">,</span> <span class="str">"Final examination result"</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-literal">Literal</span></td>
+      <td class="tok"><span>IDENTIFIER</span></td>
+      <td>
+        Variable name — references a field from the student data row or a previously computed value.
+        <code class="ex"><span class="id">final</span> <span class="op">=</span> <span class="id">exam</span> <span class="op">*</span> <span class="num">0.6</span> <span class="op">+</span> <span class="id">bonus</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+
+    <!-- ── PUNCTUATION ── -->
+    <tr>
+      <td><span class="cat cat-punc">Punctuation</span></td>
+      <td class="tok"><span>SEMICOLON</span> <code>;</code></td>
+      <td>
+        Statement terminator — required at the end of every top-level statement.
+        <code class="ex"><span class="id">avg</span> <span class="op">=</span> <span class="pun">(</span><span class="id">lab1</span> <span class="op">+</span> <span class="id">lab2</span><span class="pun">)</span> <span class="op">/</span> <span class="num">2</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-punc">Punctuation</span></td>
+      <td class="tok"><span>COMMA</span> <code>,</code></td>
+      <td>
+        Separates items in variable lists, argument lists, or the optional description in <code>EXPLAIN</code>.
+        <code class="ex"><span class="kw">APPLY</span> <span class="id">x</span> <span class="op">=&gt;</span> <span class="id">x</span> <span class="op">*</span> <span class="num">2</span> <span class="kw">TO</span> <span class="id">lab1</span><span class="pun">,</span> <span class="id">lab2</span><span class="pun">,</span> <span class="id">lab3</span><span class="pun">;</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-punc">Punctuation</span></td>
+      <td class="tok"><span>LPAREN</span> <code>(</code> &nbsp;<span>RPAREN</span> <code>)</code></td>
+      <td>
+        Groups sub-expressions or wraps function arguments.
+        <code class="ex"><span class="id">r</span> <span class="op">=</span> <span class="kw">ROUND</span><span class="pun">(</span><span class="pun">(</span><span class="id">a</span> <span class="op">+</span> <span class="id">b</span><span class="pun">)</span> <span class="op">/</span> <span class="num">2</span><span class="pun">);</span></code>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="cat cat-punc">Punctuation</span></td>
+      <td class="tok"><span>LBRACK</span> <code>[</code> &nbsp;<span>RBRACK</span> <code>]</code></td>
+      <td>
+        Encloses a constant list in an <code>IN</code> membership test.
+        <code class="ex"><span class="id">s</span> <span class="kw">IN</span> <span class="pun">[</span><span class="con">absent</span><span class="pun">,</span> <span class="con">fraud</span><span class="pun">]</span> <span class="op">?</span> <span class="num">0</span> <span class="op">:</span> <span class="id">score</span></code>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+<p class="caption">Table X — Grading DSL Lexer Token Reference: categories, tokens, and canonical usage examples.</p>
+</body>
+</html>

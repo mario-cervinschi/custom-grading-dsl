@@ -8,6 +8,7 @@ import (
 	"math"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 func (v *Evaluator) VisitExpression(ctx *parser.ExpressionContext) interface{} {
@@ -114,7 +115,7 @@ func (v *Evaluator) VisitFunctionCall(ctx *parser.FunctionCallContext) interface
 
 	var result float64
 
-	switch funcName {
+	switch strings.ToLower(funcName) {
 	case "max":
 		if len(values) == 0 {
 			return 0.0

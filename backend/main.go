@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"runtime"
 
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	fmt.Println("Main")
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	fmt.Printf("Main - Using %d CPU cores\n", runtime.NumCPU())
 
 	if err := godotenv.Load(); err != nil {
 		fmt.Println(".env file not found")
@@ -54,6 +56,7 @@ func main() {
 	http.HandleFunc("/file/save", enableCors(saveFileHandler))
 
 	http.HandleFunc("/evaluate/all", enableCors(evaluateAllHandler))
+	http.HandleFunc("/evaluate/benchmark", enableCors(evaluateBenchmarkHandler))
 
 	port := ":8080"
 	fmt.Printf("\nServer is running on http://localhost%s\n", port)

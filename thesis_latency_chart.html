@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>WebSocket Latency</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    p {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 14px;
+      text-align: center;
+      max-width: 960px;
+    }
+  </style>
+</head>
+
+<body>
+  <svg viewBox="0 0 960 480" width="960" height="480" xmlns="http://www.w3.org/2000/svg">
+
+    <rect width="960" height="480" fill="#f8fafc" rx="12" />
+    <!-- chart area: x=85..880, y=50..380  (width=795, height=330) -->
+    <rect x="85" y="50" width="795" height="330" fill="white" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Y-axis title -->
+    <text x="20" y="225" text-anchor="middle" font-family="Inter,sans-serif" font-size="24" font-weight="600"
+      fill="#475569" transform="rotate(-90 20 215)">Latency (ms)</text>
+
+    <!-- Y gridlines + labels  (scale 2.75 px/ms, base y=380) -->
+    <text x="78" y="384" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20" fill="#64748b">0</text>
+
+    <line x1="85" y1="325" x2="880" y2="325" stroke="#f1f5f9" stroke-width="1" />
+    <text x="78" y="329" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">20</text>
+
+    <line x1="85" y1="270" x2="880" y2="270" stroke="#f1f5f9" stroke-width="1" />
+    <text x="78" y="274" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">40</text>
+
+    <line x1="85" y1="215" x2="880" y2="215" stroke="#f1f5f9" stroke-width="1" />
+    <text x="78" y="219" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">60</text>
+
+    <line x1="85" y1="160" x2="880" y2="160" stroke="#f1f5f9" stroke-width="1" />
+    <text x="78" y="164" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">80</text>
+
+    <!-- 100ms target -->
+    <line x1="85" y1="105" x2="880" y2="105" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="7,4" />
+    <text x="78" y="109" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20" font-weight="600"
+      fill="#ef4444">100</text>
+    <!-- label inside chart, right-anchored -->
+    <text x="875" y="99" text-anchor="end" font-family="Inter,sans-serif" font-size="16" fill="#ef4444"
+      font-style="italic">threshold</text>
+
+    <text x="78" y="54" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">120</text>
+
+    <!-- avg reference lines (inside chart) -->
+    <!-- Validation avg 25ms → y=311 -->
+    <line x1="85" y1="311" x2="880" y2="311" stroke="#1e40af" stroke-width="1" stroke-dasharray="3,6" opacity="0.3" />
+    <!-- Suggestions avg 37ms → y=278 -->
+    <line x1="85" y1="278" x2="880" y2="278" stroke="#15803d" stroke-width="1" stroke-dasharray="3,6" opacity="0.3" />
+
+    <!-- Axes -->
+    <line x1="85" y1="50" x2="85" y2="380" stroke="#334155" stroke-width="1.8" />
+    <line x1="85" y1="380" x2="880" y2="380" stroke="#334155" stroke-width="1.8" />
+
+    <!-- X ticks (spacing=795/49≈16.22; K1=85, K10=231, K20=393, K30=555, K40=717, K50=879) -->
+    <line x1="85" y1="380" x2="85" y2="388" stroke="#334155" stroke-width="1.2" />
+    <line x1="231" y1="380" x2="231" y2="388" stroke="#334155" stroke-width="1.2" />
+    <line x1="393" y1="380" x2="393" y2="388" stroke="#334155" stroke-width="1.2" />
+    <line x1="555" y1="380" x2="555" y2="388" stroke="#334155" stroke-width="1.2" />
+    <line x1="717" y1="380" x2="717" y2="388" stroke="#334155" stroke-width="1.2" />
+    <line x1="879" y1="380" x2="879" y2="388" stroke="#334155" stroke-width="1.2" />
+
+    <text x="85" y="404" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">1</text>
+    <text x="231" y="404" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">10</text>
+    <text x="393" y="404" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">20</text>
+    <text x="555" y="404" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">30</text>
+    <text x="717" y="404" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">40</text>
+    <text x="879" y="404" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20"
+      fill="#64748b">50</text>
+
+    <text x="482" y="424" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="600"
+      fill="#475569">Keystroke</text>
+
+    <!-- Validation line (blue) 20-35ms -->
+    <polyline fill="none" stroke="#1e40af" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="
+      85,319  101,309  118,314  134,303  150,322  167,311  183,306  199,317  215,314  231,309
+      248,320  264,303  280,311  296,306  312,317  329,314  345,309  361,303  377,320  393,311
+      410,306  426,314  442,317  458,309  474,303  490,311  507,320  523,306  539,314  555,309
+      571,317  587,303  604,311  620,314  636,306  652,320  668,309  684,311  700,303  716,317
+      733,314  749,306  765,311  781,309  797,320  813,303  829,314  846,311  862,306  878,317
+    " />
+
+    <!-- Suggestions line (green) 30-60ms -->
+    <polyline fill="none" stroke="#15803d" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="
+      85,284   101,265  118,276  134,256  150,292  167,270  183,229  199,281  215,248  231,273
+      248,289  264,251  280,267  296,220  312,286  329,262  345,278  361,237  377,276  393,267
+      410,284  426,254  442,273  458,289  474,229  490,265  507,276  523,259  539,281  555,242
+      571,287  587,267  604,276  620,262  636,278  652,234  668,284  684,265  700,273  716,254
+      733,287  749,270  765,223  781,281  797,262  813,276  829,267  846,284  862,248  878,278
+    " />
+
+    <!-- LEGEND box: x=85, width=700 so it ends at 785 well inside 960 -->
+    <rect x="85" y="440" width="700" height="28" rx="5" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <!-- item 1 -->
+    <line x1="98" y1="454" x2="122" y2="454" stroke="#1e40af" stroke-width="2.5" />
+    <text x="128" y="459" font-family="Inter,sans-serif" font-size="16" fill="#334155">Validation latency</text>
+    <!-- item 2 -->
+    <line x1="278" y1="454" x2="302" y2="454" stroke="#15803d" stroke-width="2.5" />
+    <text x="308" y="459" font-family="Inter,sans-serif" font-size="16" fill="#334155">Context-aware suggestion
+      latency</text>
+    <!-- item 3 -->
+    <line x1="582" y1="454" x2="605" y2="454" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="5,3" />
+    <text x="608" y="459" font-family="Inter,sans-serif" font-size="16" fill="#334155">100 ms threshold</text>
+
+  </svg>
+</body>
+
+</html>

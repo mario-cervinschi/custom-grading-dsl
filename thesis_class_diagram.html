@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>UML Class Diagram — Go Backend Data Models</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:#fff; font-family:'Inter',sans-serif; display:flex; flex-direction:column; align-items:center; padding:40px 24px; }
+    svg { max-width:100%; height:auto; }
+  </style>
+</head>
+<body>
+<svg viewBox="0 0 1200 850" width="1200" height="850" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polyline points="0,0 9,3.5 0,7" fill="none" stroke="#334155" stroke-width="1.6"/>
+    </marker>
+    <marker id="df" markerWidth="12" markerHeight="8" refX="0" refY="4" orient="auto">
+      <polygon points="0,4 6,0 12,4 6,8" fill="#334155"/>
+    </marker>
+    <marker id="do" markerWidth="12" markerHeight="8" refX="0" refY="4" orient="auto">
+      <polygon points="0,4 6,0 12,4 6,8" fill="white" stroke="#334155" stroke-width="1.2"/>
+    </marker>
+    <filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0000001a"/></filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="850" fill="#f8fafc" rx="12"/>
+
+  <!-- ── package main boundary ── -->
+  <rect x="18" y="36" width="750" height="780" rx="8" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="7,4"/>
+  <rect x="18" y="36" width="180" height="28" rx="4" fill="#e2e8f0"/>
+  <text x="28" y="55" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#475569">«package» main</text>
+
+  <!-- ── package evaluator boundary ── -->
+  <rect x="788" y="36" width="394" height="780" rx="8" fill="none" stroke="#c4b5fd" stroke-width="1.5" stroke-dasharray="7,4"/>
+  <rect x="788" y="36" width="220" height="28" rx="4" fill="#ede9fe"/>
+  <text x="798" y="55" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#5b21b6">«package» evaluator</text>
+
+  <!-- ════════════════════════════════════════
+       COLUMN 1  x=36
+  ════════════════════════════════════════ -->
+
+  <!-- EvaluateAllRequest -->
+  <g filter="url(#sh)">
+    <rect x="36" y="80" width="320" height="40" rx="6" fill="#1e293b"/>
+    <rect x="36" y="105" width="320" height="15" fill="#1e293b"/>
+    <text x="196" y="108" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">EvaluateAllRequest</text>
+    <rect x="36" y="120" width="320" height="100" rx="6" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+    <line x1="36" y1="152" x2="356" y2="152" stroke="#e2e8f0" stroke-width="1"/>
+    <line x1="36" y1="184" x2="356" y2="184" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="48" y="145" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">OperationsFile  string</text>
+    <text x="48" y="177" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">DataFile  string</text>
+    <text x="48" y="209" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Sequential  bool</text>
+  </g>
+
+  <!-- EvaluateAllResponse -->
+  <g filter="url(#sh)">
+    <rect x="36" y="270" width="320" height="40" rx="6" fill="#1e293b"/>
+    <rect x="36" y="295" width="320" height="15" fill="#1e293b"/>
+    <text x="196" y="298" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">EvaluateAllResponse</text>
+    <rect x="36" y="310" width="320" height="100" rx="6" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+    <line x1="36" y1="342" x2="356" y2="342" stroke="#e2e8f0" stroke-width="1"/>
+    <line x1="36" y1="374" x2="356" y2="374" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="48" y="335" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Success  bool</text>
+    <text x="48" y="367" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Results  []DataResult</text>
+    <text x="48" y="399" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Error  *Error</text>
+  </g>
+
+  <!-- DataResult -->
+  <g filter="url(#sh)">
+    <rect x="36" y="500" width="320" height="40" rx="6" fill="#1e293b"/>
+    <rect x="36" y="525" width="320" height="15" fill="#1e293b"/>
+    <text x="196" y="528" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">DataResult</text>
+    <rect x="36" y="540" width="320" height="70" rx="6" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+    <line x1="36" y1="572" x2="356" y2="572" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="48" y="565" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">ID  string</text>
+    <text x="48" y="597" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Data  map[string]Data</text>
+  </g>
+
+  <!-- ════════════════════════════════════════
+       COLUMN 2  x=420
+  ════════════════════════════════════════ -->
+
+  <!-- Error -->
+  <g filter="url(#sh)">
+    <rect x="420" y="80" width="320" height="40" rx="6" fill="#1e293b"/>
+    <rect x="420" y="105" width="320" height="15" fill="#1e293b"/>
+    <text x="580" y="108" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">Error</text>
+    <rect x="420" y="120" width="320" height="40" rx="6" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+    <text x="432" y="145" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Error  string</text>
+  </g>
+
+  <!-- Data -->
+  <g filter="url(#sh)">
+    <rect x="420" y="310" width="320" height="40" rx="6" fill="#1e293b"/>
+    <rect x="420" y="335" width="320" height="15" fill="#1e293b"/>
+    <text x="580" y="338" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">Data</text>
+    <rect x="420" y="350" width="320" height="70" rx="6" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+    <line x1="420" y1="382" x2="740" y2="382" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="432" y="375" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Result  interface{}</text>
+    <text x="432" y="407" font-family="JetBrains Mono,monospace" font-size="15" fill="#0f172a">Explanation  *ExplanationStep</text>
+  </g>
+
+  <!-- ExplanationStep -->
+  <rect x="417" y="537" width="326" height="205" rx="9" fill="none" stroke="#3b82f6" stroke-width="2.5" opacity="0.4"/>
+  <g filter="url(#sh)">
+    <rect x="420" y="540" width="320" height="40" rx="6" fill="#1d4ed8"/>
+    <rect x="420" y="565" width="320" height="18" fill="#1d4ed8"/>
+    <text x="580" y="558" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#bfdbfe" font-style="italic">«key struct»</text>
+    <text x="580" y="576" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">ExplanationStep</text>
+    <rect x="420" y="583" width="320" height="154" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.4"/>
+    <line x1="420" y1="615" x2="740" y2="615" stroke="#bfdbfe" stroke-width="1"/>
+    <line x1="420" y1="647" x2="740" y2="647" stroke="#bfdbfe" stroke-width="1"/>
+    <line x1="420" y1="679" x2="740" y2="679" stroke="#bfdbfe" stroke-width="1"/>
+    <line x1="420" y1="711" x2="740" y2="711" stroke="#bfdbfe" stroke-width="1"/>
+    <text x="432" y="608" font-family="JetBrains Mono,monospace" font-size="15" fill="#1e3a8a">Original  string</text>
+    <text x="432" y="640" font-family="JetBrains Mono,monospace" font-size="15" fill="#1e3a8a">Substituted  string</text>
+    <text x="432" y="672" font-family="JetBrains Mono,monospace" font-size="15" fill="#1e3a8a">Result  interface{}</text>
+    <text x="432" y="704" font-family="JetBrains Mono,monospace" font-size="15" fill="#1e3a8a">Description  string</text>
+    <text x="432" y="728" font-family="JetBrains Mono,monospace" font-size="12" fill="#60a5fa" font-style="italic">populated by EXPLAIN keyword</text>
+  </g>
+
+  <!-- ════════════════════════════════════════
+       COLUMN 3 — evaluator package  x=810
+  ════════════════════════════════════════ -->
+
+  <!-- Variables -->
+  <g filter="url(#sh)">
+    <rect x="810" y="80" width="360" height="40" rx="6" fill="#4c1d95"/>
+    <rect x="810" y="105" width="360" height="18" fill="#4c1d95"/>
+    <text x="990" y="98" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#ddd6fe" font-style="italic">«type alias»</text>
+    <text x="990" y="116" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">Variables</text>
+    <rect x="810" y="123" width="360" height="40" rx="6" fill="#faf5ff" stroke="#6d28d9" stroke-width="1.4"/>
+    <text x="822" y="148" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">map[string]interface{}</text>
+  </g>
+
+  <!-- ExplanationData -->
+  <g filter="url(#sh)">
+    <rect x="810" y="250" width="360" height="40" rx="6" fill="#4c1d95"/>
+    <rect x="810" y="275" width="360" height="15" fill="#4c1d95"/>
+    <text x="990" y="278" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">ExplanationData</text>
+    <rect x="810" y="290" width="360" height="154" rx="6" fill="#faf5ff" stroke="#6d28d9" stroke-width="1.4"/>
+    <line x1="810" y1="322" x2="1170" y2="322" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="354" x2="1170" y2="354" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="386" x2="1170" y2="386" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="418" x2="1170" y2="418" stroke="#ddd6fe" stroke-width="1"/>
+    <text x="822" y="315" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">Variable  string</text>
+    <text x="822" y="347" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">OriginalExpression  string</text>
+    <text x="822" y="379" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">SubstitutedExpression  string</text>
+    <text x="822" y="411" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">Result  string</text>
+    <text x="822" y="438" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">Description  string</text>
+  </g>
+
+  <!-- Evaluator -->
+  <g filter="url(#sh)">
+    <rect x="810" y="520" width="360" height="40" rx="6" fill="#4c1d95"/>
+    <rect x="810" y="545" width="360" height="15" fill="#4c1d95"/>
+    <text x="990" y="548" text-anchor="middle" font-family="Inter,sans-serif" font-size="17" font-weight="700" fill="#fff">Evaluator</text>
+    <rect x="810" y="560" width="360" height="184" rx="6" fill="#faf5ff" stroke="#6d28d9" stroke-width="1.4"/>
+    <line x1="810" y1="592" x2="1170" y2="592" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="624" x2="1170" y2="624" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="656" x2="1170" y2="656" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="688" x2="1170" y2="688" stroke="#ddd6fe" stroke-width="1"/>
+    <line x1="810" y1="720" x2="1170" y2="720" stroke="#ddd6fe" stroke-width="1"/>
+    <text x="822" y="585" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">Memory  Variables</text>
+    <text x="822" y="617" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">CurrentExplanation  *ExplanationData</text>
+    <text x="822" y="649" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">IsExplaining  bool</text>
+    <text x="822" y="681" font-family="JetBrains Mono,monospace" font-size="15" fill="#4c1d95">AllExplanations  []ExplanationData</text>
+    <text x="822" y="713" font-family="JetBrains Mono,monospace" font-size="15" fill="#7c3aed">+ Visit(tree)  interface{}</text>
+    <text x="822" y="736" font-family="JetBrains Mono,monospace" font-size="12" fill="#94a3b8" font-style="italic">AST visitor implementation</text>
+  </g>
+
+  <!-- ════════════════════════════════════════
+       RELATIONSHIPS
+  ════════════════════════════════════════ -->
+
+  <!-- 1. EvaluateAllResponse ◆─1..*─▷ DataResult -->
+  <line x1="196" y1="410" x2="196" y2="500" stroke="#334155" stroke-width="1.8" marker-start="url(#df)" marker-end="url(#ah)"/>
+  <text x="204" y="440" font-family="Inter,sans-serif" font-size="14" fill="#475569">1</text>
+  <text x="204" y="490" font-family="Inter,sans-serif" font-size="14" fill="#475569">0..*</text>
+
+  <!-- 2. EvaluateAllResponse --uses--> Error -->
+  <path d="M356,360 L388,360 L388,140 L420,140" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ah)"/>
+  <text x="364" y="352" font-family="Inter,sans-serif" font-size="13" fill="#94a3b8" font-style="italic">«uses»</text>
+
+  <!-- 3. DataResult ◆─1..*─▷ Data -->
+  <path d="M356,570 L388,570 L388,385 L420,385" fill="none" stroke="#334155" stroke-width="1.8" marker-start="url(#df)" marker-end="url(#ah)"/>
+  <text x="362" y="562" font-family="Inter,sans-serif" font-size="14" fill="#475569">1</text>
+  <text x="362" y="582" font-family="Inter,sans-serif" font-size="14" fill="#475569">1..*</text>
+
+  <!-- 4. Data ◇─0..1─▷ ExplanationStep -->
+  <line x1="580" y1="420" x2="580" y2="537" stroke="#334155" stroke-width="1.8" marker-start="url(#do)" marker-end="url(#ah)"/>
+  <text x="588" y="470" font-family="Inter,sans-serif" font-size="14" fill="#475569">0..1</text>
+
+  <!-- 5. ExplanationData --serialised as--> ExplanationStep -->
+  <path d="M810,367 L770,367 L770,660 L740,660" fill="none" stroke="#3b82f6" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ah)"/>
+  <text x="715" y="358" font-family="Inter,sans-serif" font-size="13" fill="#3b82f6" font-style="italic">«serialised as»</text>
+
+  <!-- 6. Evaluator ◆─▷ ExplanationData -->
+  <line x1="990" y1="520" x2="990" y2="404" stroke="#6d28d9" stroke-width="1.8" marker-start="url(#df)" marker-end="url(#ah)"/>
+  <text x="998" y="460" font-family="Inter,sans-serif" font-size="14" fill="#6d28d9">0..*</text>
+
+  <!-- 7. Evaluator --uses--> Variables -->
+  <path d="M1170,650 L1185,650 L1185,143 L1170,143" fill="none" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#ah)"/>
+  <text x="1187" y="400" font-family="Inter,sans-serif" font-size="13" fill="#6d28d9" font-style="italic" transform="rotate(90 1187 400)">«uses»</text>
+
+</svg>
+</body>
+</html>

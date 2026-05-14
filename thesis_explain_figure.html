@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>DSL EXPLAIN — Input vs Output</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 32px;
+      min-height: 100vh;
+    }
+
+    .figure-wrap {
+      width: 100%;
+      max-width: 1020px;
+    }
+
+    /* ── two-column split ── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+    }
+
+    /* ── panel shared styles ── */
+    .panel { display: flex; flex-direction: column; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .panel-header .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      display: inline-block;
+    }
+
+    .panel-body {
+      flex: 1;
+      padding: 22px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.85;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* ── LEFT: DSL editor ── */
+    .left .panel-header  { background: #1a1a2e; color: #94a3b8; border-bottom: 1px solid #2d2d44; }
+    .left .panel-body    { background: #0f0f1a; color: #e2e8f0; }
+
+    /* ── RIGHT: JSON output ── */
+    .right .panel-header { background: #1a2e1a; color: #86efac; border-bottom: 1px solid #1f3d1f; }
+    .right .panel-body   { background: #0a150a; color: #d1fae5; }
+
+    /* ── divider line ── */
+    .divider {
+      width: 3px;
+      background: linear-gradient(to bottom, #3b82f6 0%, #8b5cf6 50%, #16a34a 100%);
+      flex-shrink: 0;
+    }
+
+    /* ── DSL syntax colours ── */
+    .kw   { color: #7dd3fc; font-weight: 600; }   /* EXPLAIN, WHEN, APPLY */
+    .id   { color: #86efac; }                      /* identifiers */
+    .op   { color: #f9a8d4; }                      /* = + - * / */
+    .num  { color: #fcd34d; }                      /* numbers */
+    .str  { color: #fca5a5; }                      /* "strings" */
+    .pun  { color: #94a3b8; }                      /* ; , */
+    .cmt  { color: #475569; font-style: italic; }  /* comments */
+    .ln   { color: #334155; user-select: none; padding-right: 16px; }  /* line numbers */
+
+    /* ── JSON syntax colours ── */
+    .jk   { color: #93c5fd; }   /* keys */
+    .js   { color: #fca5a5; }   /* string values */
+    .jn   { color: #fcd34d; }   /* number values */
+    .jb   { color: #c4b5fd; }   /* bool values */
+    .jp   { color: #64748b; }   /* punctuation {} [] : , */
+
+    /* ── callout labels ── */
+    .callout-row {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 14px;
+      gap: 12px;
+    }
+    .callout {
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      padding: 11px 14px;
+      border-left: 4px solid transparent;
+      font-size: 12px;
+      line-height: 1.5;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .callout.blue  { border-color: #3b82f6; }
+    .callout.violet{ border-color: #8b5cf6; }
+    .callout.green { border-color: #16a34a; }
+    .callout.amber { border-color: #d97706; }
+
+    .callout .label {
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .callout.blue   .label { color: #1d4ed8; }
+    .callout.violet .label { color: #6d28d9; }
+    .callout.green  .label { color: #15803d; }
+    .callout.amber  .label { color: #b45309; }
+    .callout p { color: #374151; }
+
+    .caption {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 20px;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+<div class="figure-wrap">
+
+  <div class="split">
+
+    <!-- ══════════════════════════════════════
+         LEFT PANEL — DSL rule source
+         ══════════════════════════════════════ -->
+    <div class="panel left">
+      <div class="panel-header">
+        <span class="dot" style="background:#3b82f6"></span>
+        DSL Rule File &nbsp;·&nbsp; rule.dsl
+      </div>
+      <div class="panel-body"><span class="cmt">── student fields loaded from data file ──</span>
+
+<span class="cmt">── simple assignments (no explanation) ──</span>
+<span class="ln"> 1</span><span class="id">a</span> <span class="op">=</span> <span class="id">a</span><span class="pun">;</span>
+<span class="ln"> 2</span><span class="id">b</span> <span class="op">=</span> <span class="id">b</span><span class="pun">;</span>
+
+<span class="cmt">── EXPLAIN with description string only ──</span>
+<span class="ln"> 3</span><span class="kw">EXPLAIN</span> <span class="id">x</span> <span class="op">=</span> <span class="id">a</span> <span class="op">+</span> <span class="id">b</span><span class="pun">,</span> <span class="str">"sum of two numbers"</span><span class="pun">;</span>
+
+<span class="cmt">── EXPLAIN with full traceability ──</span>
+<span class="ln"> 4</span><span class="kw">EXPLAIN</span> <span class="id">y</span> <span class="op">=</span> <span class="id">x</span> <span class="op">-</span> <span class="id">a</span><span class="pun">;</span>
+</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════
+         RIGHT PANEL — JSON response (student 1)
+         ══════════════════════════════════════ -->
+    <div class="panel right">
+      <div class="panel-header">
+        <span class="dot" style="background:#16a34a"></span>
+        JSON Response &nbsp;·&nbsp; student id&nbsp;=&nbsp;"1"
+      </div>
+      <div class="panel-body"><span class="jp">{</span>
+  <span class="jk">"id"</span><span class="jp">:</span> <span class="js">"1"</span><span class="jp">,</span>
+  <span class="jk">"data"</span><span class="jp">: {</span>
+    <span class="jk">"a"</span><span class="jp">: {</span> <span class="jk">"result"</span><span class="jp">:</span> <span class="jn">4</span> <span class="jp">},</span>
+    <span class="jk">"b"</span><span class="jp">: {</span> <span class="jk">"result"</span><span class="jp">:</span> <span class="jn">2</span> <span class="jp">},</span>
+
+    <span class="jk">"x"</span><span class="jp">: {</span>
+      <span class="jk">"result"</span><span class="jp">:</span> <span class="jn">6</span><span class="jp">,</span>
+      <span class="jk">"explanation"</span><span class="jp">: {</span>
+        <span class="jk">"description"</span><span class="jp">:</span> <span class="js">"sum of two numbers"</span>
+      <span class="jp">}</span>
+    <span class="jp">},</span>
+
+    <span class="jk">"y"</span><span class="jp">: {</span>
+      <span class="jk">"result"</span><span class="jp">:</span> <span class="jn">2</span><span class="jp">,</span>
+      <span class="jk">"explanation"</span><span class="jp">: {</span>
+        <span class="jk">"original"</span><span class="jp">:</span>     <span class="js">"y=x-a"</span><span class="jp">,</span>
+        <span class="jk">"substituted"</span><span class="jp">:</span>  <span class="js">"y=6.00-4.00"</span><span class="jp">,</span>
+        <span class="jk">"result"</span><span class="jp">:</span>       <span class="js">"2.00"</span>
+      <span class="jp">}</span>
+    <span class="jp">}</span>
+  <span class="jp">}</span>
+<span class="jp">}</span>
+</div>
+    </div>
+  </div>
+
+  <!-- ── callout annotations ── -->
+  <div class="callout-row">
+    <div class="callout blue">
+      <div class="label">① Description-only</div>
+      <p><code style="font-family:monospace;font-size:11px">EXPLAIN x = a + b, "…"</code><br>
+      Stores a human label. No expression trace is recorded because the visitor captures <em>original</em> only for non-assignment expressions.</p>
+    </div>
+    <div class="callout violet">
+      <div class="label">② Original expression</div>
+      <p><code style="font-family:monospace;font-size:11px">"original": "y=x-a"</code><br>
+      The raw DSL expression as written — identifier names, operators, no values.</p>
+    </div>
+    <div class="callout green">
+      <div class="label">③ Substituted expression</div>
+      <p><code style="font-family:monospace;font-size:11px">"substituted": "y=6.00-4.00"</code><br>
+      Identifiers replaced with their resolved numeric values at evaluation time.</p>
+    </div>
+    <div class="callout amber">
+      <div class="label">④ Computed result</div>
+      <p><code style="font-family:monospace;font-size:11px">"result": "2.00"</code><br>
+      Final value after the visitor evaluates the substituted expression tree.</p>
+    </div>
+  </div>
+
+</div>
+<p class="caption">Figure X — EXPLAIN keyword: DSL rule source (left) and the corresponding JSON evaluation response (right), student id = "1".</p>
+</body>
+</html>

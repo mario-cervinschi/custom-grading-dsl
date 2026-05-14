@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Functional Requirements Matrix</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 32px;
+      min-height: 100vh;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      color: #1a1a2e;
+    }
+
+    thead tr {
+      background-color: #1a1a2e;
+      color: #ffffff;
+    }
+
+    thead th {
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    thead th:first-child { width: 80px; }
+    thead th:nth-child(2) { width: 52%; }
+    thead th:nth-child(3) { width: 28%; }
+    thead th:last-child { width: 80px; text-align: center; }
+
+    tbody tr {
+      border-bottom: 1px solid #e8e8f0;
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background-color: #f7f7fb; }
+    tbody tr:hover { background-color: #eef0fc; }
+
+    td {
+      padding: 13px 16px;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .id-cell {
+      font-weight: 700;
+      color: #3a3aff;
+      font-family: 'Inter', monospace;
+      white-space: nowrap;
+    }
+
+    .priority-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .high   { background: #fde8e8; color: #b91c1c; }
+    .medium { background: #fef3cd; color: #92400e; }
+    .low    { background: #e7f5e9; color: #166534; }
+
+    .component-cell {
+      font-size: 12.5px;
+      color: #444466;
+      font-style: italic;
+    }
+
+    caption {
+      caption-side: bottom;
+      font-size: 11.5px;
+      color: #888;
+      margin-top: 10px;
+      text-align: left;
+      padding-left: 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Requirement Description</th>
+        <th>Implementation Component</th>
+        <th>Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="id-cell">FR-01</td>
+        <td>The system shall evaluate grading rules in a fully deterministic manner, producing identical outputs for identical inputs with no side effects or hidden state.</td>
+        <td class="component-cell">ANTLR4 Grammar &amp; Interpreter</td>
+        <td><span class="priority-badge high">High</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-02</td>
+        <td>The system shall abstract all parsing and validation complexity behind a clean API, exposing only structured results to consuming layers.</td>
+        <td class="component-cell">Go Backend / Language Server</td>
+        <td><span class="priority-badge high">High</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-03</td>
+        <td>The system shall perform real-time AST validation without blocking the UI thread, maintaining editor responsiveness at all times.</td>
+        <td class="component-cell">Frontend Language Server (Tree-sitter)</td>
+        <td><span class="priority-badge high">High</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-04</td>
+        <td>Autocompletion, grading evaluation, and the Language Server Protocol layer shall operate as independent modules with no shared mutable state.</td>
+        <td class="component-cell">LSP WebSocket Proxy &amp; Angular Services</td>
+        <td><span class="priority-badge high">High</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-05</td>
+        <td>The system shall provide a sandboxed preview mode allowing teachers to test grading formulas against sample data before publishing them.</td>
+        <td class="component-cell">Preview Panel (Angular) &amp; Go Evaluator</td>
+        <td><span class="priority-badge high">High</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-06</td>
+        <td>The editor shall suppress backend evaluation requests when the current DSL source contains syntax errors, preventing invalid execution payloads.</td>
+        <td class="component-cell">Monaco Editor &amp; RxJS Pipeline</td>
+        <td><span class="priority-badge high">High</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-07</td>
+        <td>The system shall surface syntax and semantic errors as inline diagnostics (squiggly underlines) within the editor, with descriptive hover messages.</td>
+        <td class="component-cell">Monaco Editor / Tree-sitter Validator</td>
+        <td><span class="priority-badge medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-08</td>
+        <td>The autocompletion engine shall provide context-aware suggestions that adapt to the current cursor position and grammatical context within the DSL.</td>
+        <td class="component-cell">Tree-sitter Completion Provider</td>
+        <td><span class="priority-badge medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-09</td>
+        <td>The system shall communicate between the frontend and backend Language Server exclusively via a WebSocket transport, keeping protocol and transport layers decoupled.</td>
+        <td class="component-cell">LSP-over-WebSocket Proxy (Go)</td>
+        <td><span class="priority-badge medium">Medium</span></td>
+      </tr>
+      <tr>
+        <td class="id-cell">FR-10</td>
+        <td>The grading DSL shall support conditional branching, direct score assignment, and weighted formula expressions as first-class language constructs.</td>
+        <td class="component-cell">ANTLR4 Grammar (ExprParser / ExprLexer)</td>
+        <td><span class="priority-badge low">Low</span></td>
+      </tr>
+    </tbody>
+    <caption>Table X — Functional Requirements Matrix for the Grading DSL System</caption>
+  </table>
+</div>
+</body>
+</html>

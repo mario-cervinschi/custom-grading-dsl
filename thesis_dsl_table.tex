@@ -1,0 +1,36 @@
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|>{\arraybackslash}m{0.15\textwidth}|>{\arraybackslash}m{0.25\textwidth}|>{\arraybackslash}m{0.45\textwidth}|}
+\hline
+\textbf{Category} & \textbf{Keyword / Token} & \textbf{Usage Example} \\
+\hline
+\hline Iteration & \texttt{APPLY ... TO ...} & Apply a lambda transformation to a list of variables. \\
+\hline Iteration & \texttt{=>} & Lambda separator — binds the parameter to its body in an \texttt{APPLY} expression. \\
+\hline Conditional & \texttt{WHEN ... EXISTS ...} & Guard: executes the following statement only if all listed variables are present in the data row. \\
+\hline Conditional & \texttt{... ? ... : ...} & Ternary (inline if-else) operator — \textit{condition} \texttt{?} \textit{then} \texttt{:} \textit{else}. \\
+\hline Conditional & \texttt{IN [~...~]} & Membership test — checks whether an identifier's value matches one of the listed constants. \\
+\hline Annotation & \texttt{EXPLAIN} & Marks a statement for explanation output: records the original expression, substituted values, and result. \\
+\hline Annotation & \texttt{EXPLAIN ..., "..."}  & Attaches a human-readable description string to an explanation entry. \\
+\hline Assignment & \texttt{=} & Assigns the result of an expression to an identifier in the evaluation memory. \\
+\hline Arithmetic & \texttt{+} \texttt{-} \texttt{*} \texttt{/} & Standard arithmetic operators; respect operator precedence (\texttt{*} / \texttt{/} before \texttt{+} / \texttt{-}). \\
+\hline Comparison & \texttt{==} \texttt{!=} \texttt{>} \texttt{>=} \texttt{<} \texttt{<=} & Relational operators; produce a boolean result used in conditionals. \\
+\hline Logical & \texttt{\&\&} \texttt{||} \texttt{!} & Boolean connectives; \texttt{AND} binds tighter than \texttt{OR}; \texttt{!} is a unary prefix negation. \\
+\hline Regex Match & \texttt{\textasciitilde} \texttt{!\textasciitilde} & Pattern match (\texttt{\textasciitilde}) and negative match (\texttt{!\textasciitilde}) against a string literal. \\
+\hline Built-in Function & \texttt{MAX(...)} & Returns the maximum value among its arguments. \\
+\hline Built-in Function & \texttt{MIN(...)} & Returns the minimum value among its arguments. \\
+\hline Built-in Function & \texttt{ROUND(...)} & Rounds a numeric expression to the nearest integer. \\
+\hline Status Constant & \texttt{absent} \texttt{present} \texttt{excused} & Attendance-related sentinel values for a student record field. \\
+\hline Status Constant & \texttt{nothing} \texttt{ungraded} \texttt{toolow} & Grade-state sentinels indicating a missing, unprocessed, or below-threshold result. \\
+\hline Status Constant & \texttt{fraud} \texttt{cancelled} \texttt{invalid} \texttt{alert} \texttt{conflict} \texttt{obscured} & Integrity-related sentinels flagging anomalous submission states. \\
+\hline Literal & \texttt{INT} \texttt{FLOAT} & Numeric literals; \texttt{FLOAT} requires a decimal point (e.g., \texttt{0.75}). \\
+\hline Literal & \texttt{STRING} & Double-quoted text; used as regex patterns or description annotations. \\
+\hline Literal & \texttt{IDENTIFIER} & Variable name — references a field from the student data row or a previously computed value. \\
+\hline Punctuation & \texttt{;} & Statement terminator — required at the end of every top-level statement. \\
+\hline Punctuation & \texttt{,} & Separates items in variable lists, argument lists, or the optional description in \texttt{EXPLAIN}. \\
+\hline Punctuation & \texttt{( )} & Groups sub-expressions or wraps function call arguments. \\
+\hline Punctuation & \texttt{[ ]} & Encloses a constant list in an \texttt{IN} membership test. \\
+\hline
+\end{tabular}
+\caption{DSL Lexer Token Reference: categories, tokens, and usage examples.}
+\label{dsllexertoken}
+\end{table}

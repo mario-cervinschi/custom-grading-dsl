@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Go Backend — Internal Processing Flowchart</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px 32px;
+    }
+    svg { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+<svg viewBox="0 0 820 970" width="820" height="970" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Arrow: down (main flow) -->
+    <marker id="arr-down" markerWidth="10" markerHeight="7" refX="5" refY="7" orient="auto">
+      <polygon points="0 0, 10 0, 5 7" fill="#334155"/>
+    </marker>
+    <!-- Arrow: right (error flow) -->
+    <marker id="arr-right" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/>
+    </marker>
+    <!-- Arrow: left (error flow back) -->
+    <marker id="arr-left" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#dc2626"/>
+    </marker>
+    <!-- Drop shadow -->
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#00000015"/>
+    </filter>
+    <!-- Subtle inner glow for process boxes -->
+    <linearGradient id="grad-step" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="grad-decision" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <linearGradient id="grad-error" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fef2f2"/>
+      <stop offset="100%" stop-color="#fee2e2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- BACKGROUND -->
+  <rect width="820" height="970" fill="#f8fafc" rx="14"/>
+
+  <!-- ── TITLE BAND ── -->
+  <rect x="0" y="0" width="820" height="58" rx="14" fill="#166534"/>
+  <rect x="0" y="40" width="820" height="18" fill="#166534"/>
+  <text x="410" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="700" fill="white" letter-spacing="0.04em">GO BACKEND — INTERNAL EVALUATION PIPELINE</text>
+  <text x="410" y="46" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#bbf7d0" letter-spacing="0.06em">HTTP Handler → ANTLR4 → Visitor → JSON Response</text>
+
+  <!-- ════════════════════════════════════════════════════
+       MAIN FLOW — centered at x=370
+       ════════════════════════════════════════════════════ -->
+
+  <!-- START -->
+  <ellipse cx="370" cy="108" rx="70" ry="24" fill="#166534" stroke="#14532d" stroke-width="2" filter="url(#shadow)"/>
+  <text x="370" y="113" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">START</text>
+  <text x="370" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#bbf7d0">POST /evaluate received</text>
+
+  <!-- ↓ connector -->
+  <line x1="370" y1="132" x2="370" y2="168" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+
+  <!-- ── STEP 1: I/O File Read ── -->
+  <rect x="190" y="172" width="360" height="82" rx="10" fill="url(#grad-step)" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+  <!-- step number badge -->
+  <circle cx="215" cy="213" r="14" fill="#16a34a"/>
+  <text x="215" y="217" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="white">1</text>
+  <text x="383" y="205" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#14532d">I/O File Read</text>
+  <text x="383" y="222" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#166534">os.ReadFile(rulePath)</text>
+  <text x="383" y="238" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4b5563">Load .dsl rule file + student data file from Resources folder</text>
+
+  <!-- ↓ connector -->
+  <line x1="370" y1="254" x2="370" y2="286" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+
+  <!-- ── DECISION 1: File exists & readable? ── -->
+  <!-- Diamond: center (370, 316), half-w=110, half-h=34 -->
+  <polygon points="370,282 480,316 370,350 260,316" fill="url(#grad-decision)" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+  <text x="370" y="312" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#92400e">File readable?</text>
+  <text x="370" y="327" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#78350f">path exists, permissions OK</text>
+
+  <!-- YES → down -->
+  <line x1="370" y1="350" x2="370" y2="390" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+  <rect x="378" y="356" width="28" height="16" rx="3" fill="#166534"/>
+  <text x="392" y="368" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white">YES</text>
+
+  <!-- NO → right error box -->
+  <line x1="480" y1="316" x2="585" y2="316" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arr-right)"/>
+  <text x="530" y="310" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#dc2626">NO</text>
+  <rect x="585" y="296" width="160" height="40" rx="8" fill="url(#grad-error)" stroke="#f87171" stroke-width="1.5"/>
+  <text x="665" y="313" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#b91c1c">HTTP 404 / 500</text>
+  <text x="665" y="328" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#dc2626">Error JSON returned</text>
+
+  <!-- ── STEP 2: Lexical Analysis ── -->
+  <rect x="190" y="394" width="360" height="82" rx="10" fill="url(#grad-step)" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+  <circle cx="215" cy="435" r="14" fill="#16a34a"/>
+  <text x="215" y="439" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="white">2</text>
+  <text x="383" y="425" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#14532d">Lexical Analysis</text>
+  <text x="383" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#166534">antlr.NewCommonTokenStream(ExprLexer)</text>
+  <text x="383" y="458" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4b5563">Tokenise DSL source into a stream of typed tokens</text>
+
+  <!-- ↓ connector -->
+  <line x1="370" y1="476" x2="370" y2="508" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+
+  <!-- ── STEP 3: ANTLR Syntax Parsing (AST) ── -->
+  <rect x="190" y="512" width="360" height="82" rx="10" fill="url(#grad-step)" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+  <circle cx="215" cy="553" r="14" fill="#16a34a"/>
+  <text x="215" y="557" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="white">3</text>
+  <text x="383" y="543" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#14532d">ANTLR4 Syntax Parsing — AST</text>
+  <text x="383" y="560" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#166534">parser.NewExprParser(stream).Program()</text>
+  <text x="383" y="576" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4b5563">Build Concrete Syntax Tree; attach error listener</text>
+
+  <!-- ↓ connector -->
+  <line x1="370" y1="594" x2="370" y2="626" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+
+  <!-- ── DECISION 2: Parse errors? ── -->
+  <polygon points="370,622 480,656 370,690 260,656" fill="url(#grad-decision)" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+  <text x="370" y="652" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#92400e">Parse errors?</text>
+  <text x="370" y="667" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#78350f">SyntaxErrorListener.HasErrors()</text>
+
+  <!-- NO → down (continue) -->
+  <line x1="370" y1="690" x2="370" y2="728" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+  <rect x="378" y="696" width="28" height="16" rx="3" fill="#166534"/>
+  <text x="392" y="708" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white">NO</text>
+
+  <!-- YES → right error box -->
+  <line x1="480" y1="656" x2="585" y2="656" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arr-right)"/>
+  <text x="530" y="650" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#dc2626">YES</text>
+  <rect x="585" y="636" width="160" height="40" rx="8" fill="url(#grad-error)" stroke="#f87171" stroke-width="1.5"/>
+  <text x="665" y="653" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#b91c1c">HTTP 422</text>
+  <text x="665" y="668" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#dc2626">Parse error list returned</text>
+
+  <!-- ── STEP 4: Visitor Node Evaluation ── -->
+  <rect x="190" y="732" width="360" height="82" rx="10" fill="url(#grad-step)" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+  <circle cx="215" cy="773" r="14" fill="#16a34a"/>
+  <text x="215" y="777" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="white">4</text>
+  <text x="383" y="763" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#14532d">Visitor Node Evaluation</text>
+  <text x="383" y="780" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#166534">visitor.Visit(tree) — walks AST node by node</text>
+  <text x="383" y="796" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4b5563">Resolves variables, evaluates expressions, records explanations</text>
+
+  <!-- ↓ connector -->
+  <line x1="370" y1="814" x2="370" y2="846" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+
+  <!-- ── STEP 5: JSON Serialisation ── -->
+  <rect x="190" y="850" width="360" height="72" rx="10" fill="url(#grad-step)" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+  <circle cx="215" cy="886" r="14" fill="#16a34a"/>
+  <text x="215" y="890" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="white">5</text>
+  <text x="383" y="876" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#14532d">JSON Serialisation</text>
+  <text x="383" y="893" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#166534">json.Marshal(EvaluationResponse)</text>
+  <text x="383" y="909" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4b5563">Map graded results + explanation steps → HTTP 200 response</text>
+
+  <!-- ↓ connector -->
+  <line x1="370" y1="922" x2="370" y2="946" stroke="#334155" stroke-width="2" marker-end="url(#arr-down)"/>
+
+  <!-- END -->
+  <ellipse cx="370" cy="956" rx="70" ry="22" fill="#166534" stroke="#14532d" stroke-width="2" filter="url(#shadow)"/>
+  <text x="370" y="961" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">END</text>
+
+  <!-- ════════════════════════════════════════════════════
+       LEGEND
+       ════════════════════════════════════════════════════ -->
+  <rect x="36" y="850" width="140" height="80" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="106" y="868" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#475569">LEGEND</text>
+  <rect x="50" y="876" width="22" height="16" rx="4" fill="url(#grad-step)" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="78" y="889" font-family="Inter,sans-serif" font-size="9" fill="#334155">Process step</text>
+  <polygon points="106,902 122,910 106,918 90,910" fill="url(#grad-decision)" stroke="#d97706" stroke-width="1.5"/>
+  <text x="78" y="914" font-family="Inter,sans-serif" font-size="9" fill="#334155">Decision</text>
+  <rect x="50" y="920" width="22" height="14" rx="4" fill="url(#grad-error)" stroke="#f87171" stroke-width="1.5"/>
+  <text x="78" y="931" font-family="Inter,sans-serif" font-size="9" fill="#334155">Error path</text>
+</svg>
+
+<p style="margin-top:14px;font-size:11px;color:#94a3b8;font-family:'Inter',sans-serif;letter-spacing:0.02em;">
+  Figure X — Go Backend Internal Flowchart: I/O Read → Lexical Analysis → ANTLR4 Parsing → Visitor Evaluation → JSON Serialisation.
+</p>
+</body>
+</html>

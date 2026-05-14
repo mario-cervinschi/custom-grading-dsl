@@ -18,6 +18,7 @@ type CreateFileRequest struct {
 type EvaluateAllRequest struct {
 	OperationsFile string `json:"operations_file"`
 	DataFile       string `json:"data_file"`
+	Sequential     bool   `json:"sequential,omitempty"`
 }
 
 type DataResult struct {
@@ -73,3 +74,19 @@ type SituationResponse struct {
 	Data    map[string]Data `json:"data,omitempty"`
 	Error   *Error          `json:"error,omitempty"`
 }
+
+type BenchmarkRequest struct {
+	OperationsFile string `json:"operations_file"`
+	DataFile       string `json:"data_file"`
+	Iterations     int    `json:"iterations"`
+	Sequential     bool   `json:"sequential,omitempty"`
+}
+
+type BenchmarkResponse struct {
+	Success       bool      `json:"success"`
+	Iterations    int       `json:"iterations"`
+	TimesMs       []float64 `json:"times_ms"`
+	AverageTimeMs float64   `json:"average_time_ms"`
+	Error         *Error    `json:"error,omitempty"`
+}
+

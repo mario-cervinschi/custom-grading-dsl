@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>System Architecture Diagram</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:#fff; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:40px; }
+    svg { max-width:100%; height:auto; filter:drop-shadow(0 2px 10px rgba(0,0,0,0.09)); }
+  </style>
+</head>
+<body>
+<svg viewBox="0 0 1280 590" width="1280" height="590" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="av"  markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#8b5cf6"/></marker>
+    <marker id="ag"  markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#16a34a"/></marker>
+    <marker id="ad"  markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#334155"/></marker>
+    <marker id="aa"  markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#d97706"/></marker>
+    <filter id="sh" x="-6%" y="-6%" width="115%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#00000015"/></filter>
+  </defs>
+
+  <rect width="1280" height="590" fill="#f8fafc" rx="12"/>
+
+  <!-- ─────────────────────────────────────
+       BOX 1  Angular Frontend
+       x=20 y=85 w=270 h=415
+  ───────────────────────────────────── -->
+  <rect x="20" y="85" width="270" height="415" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" filter="url(#sh)"/>
+  <rect x="20" y="85"  width="270" height="45" rx="10" fill="#3b82f6"/>
+  <rect x="20" y="110" width="270" height="20"          fill="#3b82f6"/>
+  <text x="155" y="114" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="white">Angular Frontend</text>
+
+  <!-- Monaco Editor -->
+  <rect x="36" y="145" width="238" height="110" rx="7" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="155" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#1e40af">Monaco Editor</text>
+  <text x="155" y="190" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#1d4ed8">DSL Rule Creator</text>
+  <text x="155" y="212" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#1d4ed8">Syntax Highlighting</text>
+  <text x="155" y="234" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#1d4ed8">Inline Diagnostics</text>
+
+  <!-- Preview Panel -->
+  <rect x="36" y="270" width="238" height="100" rx="7" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="155" y="294" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#1e40af">Preview Panel</text>
+  <text x="155" y="317" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#1d4ed8">Results &amp; Explanations</text>
+  <text x="155" y="340" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#1d4ed8">Paginated Output</text>
+
+  <!-- File Manager -->
+  <rect x="36" y="385" width="238" height="80" rx="7" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="155" y="409" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#1e40af">File Manager</text>
+  <text x="155" y="434" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#1d4ed8">Rule &amp; Data File Selection</text>
+
+  <!-- ─────────────────────────────────────
+       BOX 2  Language Server
+       x=490 y=45 w=270 h=225
+  ───────────────────────────────────── -->
+  <rect x="490" y="45" width="270" height="225" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2" filter="url(#sh)"/>
+  <rect x="490" y="45"  width="270" height="45" rx="10" fill="#8b5cf6"/>
+  <rect x="490" y="70"  width="270" height="20"          fill="#8b5cf6"/>
+  <text x="625" y="74" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="white">Language Server</text>
+
+  <rect x="506" y="105" width="238" height="72" rx="7" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="625" y="128" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#5b21b6">Tree-sitter Parser</text>
+  <text x="625" y="151" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#6d28d9">Incremental AST Parsing</text>
+
+  <rect x="506" y="192" width="238" height="66" rx="7" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="625" y="215" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#5b21b6">LSP Handler</text>
+  <text x="625" y="238" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#6d28d9">Completions &amp; Diagnostics</text>
+
+  <!-- ─────────────────────────────────────
+       BOX 3  Go Backend API
+       x=490 y=345 w=270 h=235
+  ───────────────────────────────────── -->
+  <rect x="490" y="345" width="270" height="235" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+  <rect x="490" y="345" width="270" height="45" rx="10" fill="#16a34a"/>
+  <rect x="490" y="370" width="270" height="20"          fill="#16a34a"/>
+  <text x="625" y="374" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="white">Go Backend API</text>
+
+  <rect x="506" y="402" width="238" height="76" rx="7" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+  <text x="625" y="425" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#14532d">ANTLR4 Lexer &amp; Parser</text>
+  <text x="625" y="449" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#166534">DSL Tokenisation &amp; AST</text>
+
+  <rect x="506" y="494" width="238" height="72" rx="7" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+  <text x="625" y="517" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#14532d">Visitor / Evaluator</text>
+  <text x="625" y="541" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#166534">Rule Execution &amp; Grading</text>
+
+  <!-- ─────────────────────────────────────
+       BOX 4  File-Based Storage
+       x=1000 y=195 w=260 h=230
+  ───────────────────────────────────── -->
+  <rect x="1000" y="195" width="260" height="235" rx="10" fill="#fff7ed" stroke="#d97706" stroke-width="2" filter="url(#sh)"/>
+  <rect x="1000" y="195" width="260" height="60"  rx="10" fill="#d97706"/>
+  <rect x="1000" y="228" width="260" height="27"           fill="#d97706"/>
+  <text x="1130" y="222" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="white">File-Based Storage</text>
+  <text x="1130" y="246" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="500" fill="white">Resources Folder</text>
+
+  <rect x="1016" y="270" width="228" height="70" rx="7" fill="#ffedd5" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="1130" y="293" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#92400e">Rule Files</text>
+  <text x="1130" y="317" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#b45309">DSL Rule Scripts</text>
+
+  <rect x="1016" y="354" width="228" height="68" rx="7" fill="#ffedd5" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="1130" y="377" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#92400e">Data Files</text>
+  <text x="1130" y="401" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" fill="#b45309">Relevant Data Records</text>
+
+  <!-- ─────────────────────────────────────
+       ARROW 1  Frontend ↔ Language Server
+  ───────────────────────────────────── -->
+  <!-- forward -->
+  <line x1="290" y1="150" x2="488" y2="150" stroke="#8b5cf6" stroke-width="2" marker-end="url(#av)"/>
+  <!-- return dashed -->
+  <line x1="488" y1="165" x2="290" y2="165" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#av)"/>
+  <!-- label box -->
+  <rect x="340" y="94" width="140" height="46" rx="5" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.2"/>
+  <text x="410" y="116" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#7c3aed">WebSocket</text>
+  <text x="410" y="132" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#7c3aed">LSP Protocol</text>
+
+  <!-- ─────────────────────────────────────
+       ARROW 2  Frontend ↔ Go Backend
+  ───────────────────────────────────── -->
+  <!-- forward -->
+  <line x1="290" y1="450" x2="488" y2="450" stroke="#16a34a" stroke-width="2" marker-end="url(#ag)"/>
+  <!-- return dashed -->
+  <line x1="488" y1="465" x2="290" y2="465" stroke="#16a34a" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ad)"/>
+  <!-- label box -->
+  <rect x="330" y="394" width="150" height="46" rx="5" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+  <text x="405" y="416" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#15803d">HTTP REST</text>
+  <text x="405" y="432" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#15803d">Evaluate Request</text>
+
+  <!-- ─────────────────────────────────────
+       ARROW 3  Go Backend ↔ File Storage
+  ───────────────────────────────────── -->
+  <!-- forward -->
+  <line x1="760" y1="380" x2="998" y2="380" stroke="#d97706" stroke-width="2" marker-end="url(#aa)"/>
+  <!-- return dashed -->
+  <line x1="998" y1="395" x2="760" y2="395" stroke="#d97706" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ad)"/>
+  <!-- label box -->
+  <rect x="810" y="324" width="140" height="46" rx="5" fill="#fff7ed" stroke="#fdba74" stroke-width="1.2"/>
+  <text x="880" y="346" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#b45309">File I/O</text>
+  <text x="880" y="362" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#b45309">Read / Write</text>
+
+</svg>
+</body>
+</html>

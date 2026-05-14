@@ -108,7 +108,6 @@ export class DataInputTableComponent {
         tap(() => {
           this.showToast('success', 'Saved', 'File saved successfully.');
 
-          // 2. APELĂM REFRESH DUPĂ CE DATELE S-AU SALVAT
           this.previewService.triggerRefresh();
         }),
         catchError((err) =>

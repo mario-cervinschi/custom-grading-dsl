@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>UML Sequence Diagram — Grading DSL System</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+    }
+
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <svg viewBox="0 0 1100 660" width="1100" height="660" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Solid arrowhead (request) -->
+      <marker id="arr-solid" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#334155" />
+      </marker>
+      <!-- Open arrowhead (response/return) -->
+      <marker id="arr-open" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5" />
+      </marker>
+      <marker id="arr-open-red" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <polyline points="0,0 9,4 0,8" fill="none" stroke="#dc2626" stroke-width="1.5" />
+      </marker>
+      <marker id="arr-solid-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626" />
+      </marker>
+    </defs>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- BACKGROUND                                            -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <rect width="1100" height="660" fill="#f8fafc" rx="12" />
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- PARTICIPANT BOXES                                     -->
+    <!-- X centers: Angular=140, LS=370, Go=660, File=930     -->
+    <!-- ───────────────────────────────────────────────────── -->
+
+    <!-- Angular UI -->
+    <rect x="45" y="30" width="190" height="50" rx="8" fill="#1e40af" stroke="#1e3a8a" stroke-width="1.5" />
+    <text x="140" y="51" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700"
+      fill="white">Angular UI</text>
+    <text x="140" y="68" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#bfdbfe">Monaco Editor
+      + Preview</text>
+
+    <!-- Language Server -->
+    <rect x="275" y="30" width="190" height="50" rx="8" fill="#6d28d9" stroke="#5b21b6" stroke-width="1.5" />
+    <text x="370" y="51" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700"
+      fill="white">Language Server</text>
+    <text x="370" y="68" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#ddd6fe">Tree-sitter /
+      LSP</text>
+
+    <!-- Go REST API -->
+    <rect x="565" y="30" width="190" height="50" rx="8" fill="#166534" stroke="#14532d" stroke-width="1.5" />
+    <text x="660" y="51" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700"
+      fill="white">Go REST API</text>
+    <text x="660" y="68" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#bbf7d0">ANTLR4
+      Evaluator</text>
+
+    <!-- File Storage -->
+    <rect x="835" y="30" width="190" height="50" rx="8" fill="#92400e" stroke="#78350f" stroke-width="1.5" />
+    <text x="930" y="51" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700"
+      fill="white">File Storage</text>
+    <text x="930" y="68" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#fed7aa">Resources
+      Folder</text>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- LIFELINES (dashed vertical lines)                     -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="140" y1="80" x2="140" y2="610" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" />
+    <line x1="370" y1="80" x2="370" y2="610" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" />
+    <line x1="660" y1="80" x2="660" y2="610" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" />
+    <line x1="930" y1="80" x2="930" y2="610" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" />
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- ACTIVATION BOXES                                      -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- Angular: active throughout most of interaction -->
+    <rect x="134" y="118" width="12" height="460" rx="2" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1" />
+    <!-- Language Server: active during steps 1-2 -->
+    <rect x="364" y="145" width="12" height="115" rx="2" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="1" />
+    <!-- Go API: active during steps 3-6 -->
+    <rect x="654" y="290" width="12" height="230" rx="2" fill="#bbf7d0" stroke="#16a34a" stroke-width="1" />
+    <!-- File Storage: active during steps 4-5 -->
+    <rect x="924" y="348" width="12" height="80" rx="2" fill="#fed7aa" stroke="#d97706" stroke-width="1" />
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- STEP 1: Angular → Language Server                     -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="146" y1="160" x2="364" y2="160" stroke="#334155" stroke-width="1.8" marker-end="url(#arr-solid)" />
+    <!-- Step label bubble -->
+    <circle cx="152" cy="160" r="9" fill="#1e40af" />
+    <text x="152" y="164" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700"
+      fill="white">1</text>
+    <!-- Message label -->
+    <rect x="178" y="143" width="160" height="28" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <text x="258" y="155" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600"
+      fill="#1e293b">textDocument/didChange</text>
+    <text x="258" y="167" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#64748b">DSL source
+      text sent via WebSocket</text>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- STEP 2: Language Server → Angular (return, dashed)    -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="364" y1="235" x2="146" y2="235" stroke="#334155" stroke-width="1.8" stroke-dasharray="6,3"
+      marker-end="url(#arr-open)" />
+    <circle cx="358" cy="235" r="9" fill="#6d28d9" />
+    <text x="358" y="239" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700"
+      fill="white">2</text>
+    <rect x="168" y="218" width="170" height="28" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <text x="253" y="230" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600"
+      fill="#1e293b">publishDiagnostics + completions</text>
+    <text x="253" y="242" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#64748b">Inline
+      markers rendered in Monaco</text>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- STEP 3: Angular → Go REST API                         -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="146" y1="310" x2="654" y2="310" stroke="#334155" stroke-width="1.8" marker-end="url(#arr-solid)" />
+    <circle cx="152" cy="310" r="9" fill="#1e40af" />
+    <text x="152" y="314" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700"
+      fill="white">3</text>
+    <rect x="260" y="293" width="230" height="28" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <text x="375" y="305" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600"
+      fill="#1e293b">POST /evaluate/all</text>
+    <text x="375" y="317" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#64748b">{
+      operations_file,
+      data_file } — HTTP REST</text>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- STEP 4: Go REST API → File Storage                    -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="666" y1="368" x2="924" y2="368" stroke="#334155" stroke-width="1.8" marker-end="url(#arr-solid)" />
+    <circle cx="672" cy="368" r="9" fill="#166534" />
+    <text x="672" y="372" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700"
+      fill="white">4</text>
+    <rect x="720" y="351" width="178" height="28" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <text x="809" y="363" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600"
+      fill="#1e293b">os.Open(path)</text>
+    <text x="809" y="375" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#64748b">Read rule +
+      data files from disk</text>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- STEP 5: File Storage → Go REST API (return, dashed)   -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="924" y1="428" x2="666" y2="428" stroke="#334155" stroke-width="1.8" stroke-dasharray="6,3"
+      marker-end="url(#arr-open)" />
+    <circle cx="918" cy="428" r="9" fill="#92400e" />
+    <text x="918" y="432" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700"
+      fill="white">5</text>
+    <rect x="720" y="411" width="178" height="28" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <text x="809" y="423" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600"
+      fill="#1e293b">File contents</text>
+    <text x="809" y="435" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#64748b">ANTLR4 lexes,
+      parses, evaluates</text>
+
+    <!-- ───────────────────────────────────────────────────── -->
+    <!-- STEP 6: Go REST API → Angular (return, dashed)        -->
+    <!-- ───────────────────────────────────────────────────── -->
+    <line x1="654" y1="498" x2="146" y2="498" stroke="#334155" stroke-width="1.8" stroke-dasharray="6,3"
+      marker-end="url(#arr-open)" />
+    <circle cx="648" cy="498" r="9" fill="#166534" />
+    <text x="648" y="502" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700"
+      fill="white">6</text>
+    <rect x="260" y="481" width="260" height="28" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1" />
+    <text x="390" y="493" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600"
+      fill="#1e293b">200 OK — { results: [...] }</text>
+    <text x="390" y="505" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#64748b">Preview Panel
+      renders the output</text>
+
+  </svg>
+</body>
+
+</html>

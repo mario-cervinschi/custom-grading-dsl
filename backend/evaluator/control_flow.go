@@ -74,15 +74,15 @@ func (v *Evaluator) VisitNormal_operation(ctx *parser.Normal_operationContext) i
 		resultStr = fmt.Sprintf("%v", val)
 	}
 
-	if hasExplanation {
-		if hasDescription {
-			stringDescription, err := strconv.Unquote(fmt.Sprintf("%v", ctx.STRING()))
-			if err != nil {
-				panic(err)
-			}
-			v.CurrentExplanation.Description = stringDescription
+	if hasDescription {
+		stringDescription, err := strconv.Unquote(fmt.Sprintf("%v", ctx.STRING()))
+		if err != nil {
+			panic(err)
 		}
+		v.CurrentExplanation.Description = stringDescription
+	}
 
+	if hasExplanation {
 		v.CurrentExplanation.Result = resultStr
 		v.AllExplanations = append(v.AllExplanations, *v.CurrentExplanation)
 

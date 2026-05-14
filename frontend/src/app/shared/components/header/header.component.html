@@ -4,6 +4,8 @@
   <h1 class="text-xl font-bold tracking-tight">Editor</h1>
 
   <nav class="flex items-center gap-2">
-    <!--  -->
+    <button (click)="toggleTheme()" class="px-3 py-1 text-sm border border-[#525252] rounded-md hover:bg-[#404040] transition-all cursor-pointer">
+      {{ isLight ? '🌙' : '☀️' }}
+    </button>
   </nav>
 </header>
