@@ -1,0 +1,55 @@
+<section class="flex flex-col h-full w-full border-r border-b border-[#404040]">
+  <div class="flex items-center justify-between px-4 py-2 bg-[#404040]/50 shrink-0">
+    <span class="text-sm font-medium">Operations File</span>
+    <div class="flex gap-2">
+      <button
+        (click)="openNewFileDialog()"
+        class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 -960 960 960"
+          width="20px"
+          fill="#e3e3e3"
+        >
+          <path d="M444-444H240v-72h204v-204h72v204h204v72H516v204h-72v-204Z" />
+        </svg>
+        New
+      </button>
+      <button
+        (click)="openOpenFileDialog()"
+        class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 -960 960 960"
+          width="20px"
+          fill="#e3e3e3"
+        >
+          <path
+            d="M168-192q-32 0-52-21.16t-20-50.88v-432.24Q96-726 116-747t52-21h216l96 96h313q31 0 50.5 21t21.5 51H451l-96-96H168v432l78-264h690l-85 285q-8 23-21 37t-38 14H168Zm75-72h538l59-192H300l-57 192Zm0 0 57-192-57 192Zm-75-336v-96 96Z"
+          />
+        </svg>
+        Open
+      </button>
+    </div>
+  </div>
+  <div class="flex flex-col flex-1 w-full h-[calc(100%-44px)] p-4 text-[#b3b3b3] overflow-hidden">
+    <div class="flex flex-row justify-between shrink-0">
+      <p class="text-sm pb-2">{{ operationsFileSelected() }} selected</p>
+    </div>
+    @if (operationsFileSelected() !== 'No file') {
+      <ngx-monaco-editor
+        class="flex-1 w-full rounded-lg overflow-hidden border border-[#444444]"
+        [options]="EDITOR_OPTIONS"
+        (ngModelChange)="onContentChange($event)"
+        [(ngModel)]="editorContent"
+        (onInit)="onEditorInit($event)"
+      />
+    }
+  </div>
+</section>
+
+<p-toast></p-toast>

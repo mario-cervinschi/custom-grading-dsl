@@ -1,0 +1,246 @@
+<section class="flex flex-col h-full w-full border-r border-[#404040]">
+  <div class="flex items-center justify-between px-4 py-2 bg-[#404040]/50 shrink-0">
+    <span class="text-sm font-medium">Data Input</span>
+    <div class="flex gap-2">
+      <button
+        (click)="openNewFileDialog()"
+        class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 -960 960 960"
+          width="20px"
+          fill="#e3e3e3"
+        >
+          <path d="M444-444H240v-72h204v-204h72v204h204v72H516v204h-72v-204Z" />
+        </svg>
+        New
+      </button>
+      <button
+        (click)="openOpenFileDialog()"
+        class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 -960 960 960"
+          width="20px"
+          fill="#e3e3e3"
+        >
+          <path
+            d="M168-192q-32 0-52-21.16t-20-50.88v-432.24Q96-726 116-747t52-21h216l96 96h313q31 0 50.5 21t21.5 51H451l-96-96H168v432l78-264h690l-85 285q-8 23-21 37t-38 14H168Zm75-72h538l59-192H300l-57 192Zm0 0 57-192-57 192Zm-75-336v-96 96Z"
+          />
+        </svg>
+        Open
+      </button>
+      <button
+        (click)="onSave()"
+        class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 -960 960 960"
+          width="20px"
+          fill="#e3e3e3"
+        >
+          <path
+            d="M816-672v456q0 29.7-21.15 50.85Q773.7-144 744-144H216q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h456l144 144Zm-72 30L642-744H216v528h528v-426ZM556.5-283.5Q588-315 588-360t-31.5-76.5Q525-468 480-468t-76.5 31.5Q372-405 372-360t31.5 76.5Q435-252 480-252t76.5-31.5ZM264-552h336v-144H264v144Zm-48-77v413-528 115Z"
+          />
+        </svg>
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col flex-1 p-4 text-[#b3b3b3] overflow-hidden">
+    <p class="text-sm pb-2 shrink-0">{{ dataFileSelected() }} selected</p>
+    @if (dataFileSelected() !== 'No file') {
+      <div class="flex flex-row gap-2 justify-between shrink-0 mb-3">
+        <button
+          (click)="openInputDialog()"
+          class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20px"
+            viewBox="0 -960 960 960"
+            width="20px"
+            fill="#e3e3e3"
+          >
+            <path d="M444-444H240v-72h204v-204h72v204h204v72H516v204h-72v-204Z" />
+          </svg>
+          Add new entry
+        </button>
+        <button
+          (click)="openAddColumnDialog()"
+          class="flex items-center gap-2 px-3 py-1 text-sm bg-[#262626] border border-[#525252] rounded-md hover:bg-[#404040] transition-all"
+        >
+          Add new column
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20px"
+            viewBox="0 -960 960 960"
+            width="20px"
+            fill="#e3e3e3"
+          >
+            <path d="M444-444H240v-72h204v-204h72v204h204v72H516v204h-72v-204Z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex flex-col flex-1 overflow-hidden border border-[#444444] rounded-lg">
+        <p-table
+          [scrollable]="true"
+          scrollHeight="flex"
+          showGridlines
+          [size]="'small'"
+          [columns]="cols()"
+          [value]="data()"
+          [tableStyle]="{ 'min-width': 'fit-content' }"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="46"
+        >
+          <ng-template #header let-columns>
+            <tr>
+              @for (col of columns; track col) {
+                @if (col.header === 'ID') {
+                  <th pFrozenColumn class="text-white bg-[#2d2d2d]">{{ col.header }}</th>
+                } @else {
+                  <th class="text-white bg-[#2d2d2d]">{{ col.header }}</th>
+                }
+              }
+            </tr>
+          </ng-template>
+          <ng-template #body let-rowData let-columns="columns">
+            <tr>
+              @for (col of columns; track col) {
+                @if (col.field === 'id') {
+                  <td
+                    class="min-w-20 p-1 bg-[#1a1a1a]"
+                    pFrozenColumn
+                    [pEditableColumn]="rowData[col.field]"
+                    [pEditableColumnField]="col.field"
+                  >
+                    <p-cellEditor>
+                      <ng-template #input>
+                        <input
+                          class="w-fit px-2 py-1 text-sm bg-[#262626] border-[#444444] rounded-md focus:outline-none text-white"
+                          type="text"
+                          [(ngModel)]="rowData[col.field]"
+                        />
+                      </ng-template>
+                      <ng-template #output
+                        ><span class="pl-2">{{ rowData[col.field] }}</span></ng-template
+                      >
+                    </p-cellEditor>
+                  </td>
+                } @else {
+                  <td
+                    class="min-w-20 p-1 bg-[#070707]"
+                    [pEditableColumn]="rowData[col.field]"
+                    [pEditableColumnField]="col.field"
+                  >
+                    <p-cellEditor>
+                      <ng-template #input>
+                        <input
+                          class="w-fit px-2 py-1 text-sm bg-[#262626] border-[#444444] rounded-md focus:outline-none text-white"
+                          type="text"
+                          [(ngModel)]="rowData[col.field]"
+                        />
+                      </ng-template>
+                      <ng-template #output
+                        ><span class="pl-2">{{ rowData[col.field] }}</span></ng-template
+                      >
+                    </p-cellEditor>
+                  </td>
+                }
+              }
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+  </div>
+</section>
+
+<p-dialog
+  [visible]="newInputDialog()"
+  (visibleChange)="newInputDialog.set($event)"
+  [style]="{ width: '450px' }"
+  header="Add New Entry"
+  [modal]="true"
+  [dismissableMask]="true"
+>
+  <ng-template #content>
+    <div class="flex flex-col gap-4 mt-2">
+      @for (col of cols(); track col.field) {
+        <div>
+          <label [for]="col.field" class="block font-bold mb-2">{{ col.header }}</label>
+          <input
+            type="text"
+            [id]="col.field"
+            [(ngModel)]="newRowData()[col.field]"
+            class="w-full px-2 py-2 text-sm bg-[#262626] border-[#444444] rounded-md focus:outline-2 focus:outline-[#535353] text-white"
+            autocomplete="off"
+          />
+          @if (col.field === 'id' && !newRowData()[col.field]) {
+            <small class="text-red-500">ID is required to identify the row.</small>
+          }
+        </div>
+      }
+    </div>
+  </ng-template>
+  <ng-template #footer>
+    <button
+      class="flex items-center gap-2 px-4 py-2 mt-2 text-sm bg-transparent rounded-md hover:bg-[#404040] cursor-pointer transition-all"
+      severity="secondary"
+      (click)="newInputDialog.set(false)"
+    >
+      Cancel
+    </button>
+    <button
+      class="flex items-center gap-2 px-4 py-2 mt-2 text-sm bg-[#262626] disabled:bg-[#8d8d8d] disabled:text-gray-700 disabled:cursor-not-allowed cursor-pointer rounded-md hover:bg-[#404040] transition-all"
+      (click)="saveNewEntry()"
+      [disabled]="!newRowData()['id']"
+    >
+      Save
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [visible]="newColumnDialog()"
+  (visibleChange)="newColumnDialog.set($event)"
+  header="Add Column"
+  [modal]="true"
+  [dismissableMask]="true"
+>
+  <div class="flex flex-col gap-3 mt-2">
+    <input
+      type="text"
+      [(ngModel)]="newColumnName"
+      class="w-full px-2 py-2 text-sm bg-[#262626] border-[#444444] rounded-md focus:outline-2 focus:outline-[#535353] text-white"
+      placeholder="Column name"
+    />
+  </div>
+  <ng-template #footer>
+    <button
+      severity="secondary"
+      (click)="newColumnDialog.set(false)"
+      class="flex items-center gap-2 px-4 py-2 mt-2 text-sm bg-transparent rounded-md hover:bg-[#404040] cursor-pointer transition-all"
+    >
+      Cancel
+    </button>
+    <button
+      label="Add"
+      class="flex items-center gap-2 px-4 py-2 mt-2 text-sm bg-[#262626] cursor-pointer rounded-md hover:bg-[#404040] transition-all"
+      (click)="addColumn()"
+    >
+      Add
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

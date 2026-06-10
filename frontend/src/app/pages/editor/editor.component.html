@@ -1,0 +1,35 @@
+<main
+  class="h-[calc(100vh-56px)] w-full bg-[#1a1a1a] text-[#fafafa] font-sans flex flex-col overflow-hidden"
+>
+  <p-toast></p-toast>
+
+  <p-splitter [panelSizes]="[50, 50]" class="h-full w-full border-none bg-transparent">
+    <ng-template pTemplate>
+      <p-splitter
+        layout="vertical"
+        [panelSizes]="[50, 50]"
+        class="h-full w-full border-none bg-transparent"
+      >
+        <ng-template pTemplate>
+          <app-operations-editor
+            class="flex flex-col h-full w-full overflow-hidden min-w-0 min-h-0"
+          ></app-operations-editor>
+        </ng-template>
+
+        <ng-template pTemplate>
+          <app-data-input-table
+            class="flex flex-col h-full w-full overflow-hidden min-w-0 min-h-0"
+          ></app-data-input-table>
+        </ng-template>
+      </p-splitter>
+    </ng-template>
+
+    <ng-template pTemplate>
+      <section class="h-full w-full flex flex-col overflow-hidden min-w-0 min-h-0">
+        <app-preview-panel
+          class="flex flex-col h-full w-full overflow-hidden min-w-0 min-h-0"
+        ></app-preview-panel>
+      </section>
+    </ng-template>
+  </p-splitter>
+</main>
