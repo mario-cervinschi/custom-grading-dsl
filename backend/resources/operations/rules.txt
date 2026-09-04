@@ -1,9 +1,0 @@
-EXPLAIN lab_grade = (laboratory_1 + laboratory_2 + laboratory_3) / 3;
-
-EXPLAIN final_grade = lab_grade * 0.3 + exam * 0.7;
-
-
-WHEN bonus EXISTS EXPLAIN final_grade = MIN(10, final_grade + bonus), "ADDED BONUS";
-WHEN penalty EXISTS EXPLAIN final_grade = MAX(4, final_grade - penalty), "ADDED PENALTY";
-
-APPLY x => x + 1 TO laboratory_1 

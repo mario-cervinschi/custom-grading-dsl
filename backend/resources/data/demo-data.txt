@@ -1,0 +1,33 @@
+[Popescu Ana]
+lab1 = 9
+lab2 = 10
+lab3 = 8
+exam = 9
+
+[Ionescu Mihai]
+lab1 = 5
+lab2 = 6
+lab3 = 4
+exam = 7
+bonus = 1.5
+
+[Radu Maria]
+lab1 = 7
+lab2 = 8
+lab3 = 9
+exam = 3
+status = absent
+
+[Stan Alex]
+lab1 = 10
+lab2 = 9
+lab3 = 10
+exam = 10
+bonus = 2
+
+[Popa Diana]
+lab1 = 6
+lab2 = 5
+lab3 = 7
+exam = 6
+penalty = 1

@@ -1,25 +1,31 @@
+[5]
+laboratory_1 = 2
+exam = 2
+laboratory_2 = 2
+laboratory_3 = 2
+
 [4]
-laboratory_1 = 6
 exam = 7
+laboratory_1 = 6
 laboratory_2 = 9
 laboratory_3 = 6
 
 [3]
-laboratory_1 = 4
 exam = 8
+laboratory_1 = 4
 laboratory_2 = 8
 laboratory_3 = 9
 
 [2]
-laboratory_1 = 9
+bonus = 1
 exam = 10
+laboratory_1 = 9
 laboratory_2 = 10
 laboratory_3 = 10
-bonus = 1
 
 [1]
-laboratory_1 = 4
 exam = 7
+laboratory_1 = 4
 laboratory_2 = 6
 laboratory_3 = 4
 penalty = 1

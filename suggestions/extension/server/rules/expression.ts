@@ -27,7 +27,6 @@ export function suggestExpressionValue(): CompletionItem[] {
     createKeyword("number", "0"),
   ];
 
-  // Add all DSL constants
   for (const c of DSL_CONSTANTS) {
     const item = createKeyword(c, c);
     item.detail = "constant value";
@@ -63,20 +62,17 @@ export function suggestExpressionValue(): CompletionItem[] {
 
 /**
  * Suggestions after a comparison operator (==, !=, >, <, >=, <=).
- * Includes constants because comparisons often check against known values.
  */
 export function suggestComparisonRHS(): CompletionItem[] {
   const items: CompletionItem[] = [];
 
-  // Constants first (most common in comparisons)
   for (const c of DSL_CONSTANTS) {
     const item = createKeyword(c, c);
     item.detail = "constant";
-    item.sortText = "0_" + c; // sort constants first
+    item.sortText = "0_" + c; // sort constants
     items.push(item);
   }
 
-  // Then general values
   items.push(
     createSnippet("variable", "${1:var_name}", "compare with variable"),
     createKeyword("number", "0"),
@@ -114,8 +110,7 @@ export function suggestOperatorsAfterValue(): CompletionItem[] {
 }
 
 /**
- * Suggestions after '?' in a ternary — the "true" branch.
- * Includes nested ternary as option.
+ * Suggestions after '?' in a ternary, the "true" branch.
  */
 export function suggestTernaryBranch(): CompletionItem[] {
   const items: CompletionItem[] = [];

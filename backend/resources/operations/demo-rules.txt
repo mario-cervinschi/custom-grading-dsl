@@ -1,0 +1,9 @@
+EXPLAIN labs = (lab1 + lab2 + lab3) / 3, "Calcul medie laboratoare";
+EXPLAIN final = labs * 0.4 + exam * 0.6, "Nota finala";
+
+WHEN bonus EXISTS final = MIN(10, final + bonus), "Nota finala cu bonus";
+WHEN penalty EXISTS EXPLAIN final = MAX(4, final - penalty), "Nota finala cu penalizare";
+
+APPLY x => MIN(10, x + 1) TO lab1, lab2, lab3 ; 
+
+WHEN status EXISTS EXPLAIN final = status == absent ? 4  : final, "Verificare prezenta";

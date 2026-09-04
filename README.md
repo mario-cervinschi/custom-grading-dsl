@@ -3,16 +3,6 @@ A modern web application and evaluation engine for a custom, domain-specific lan
 
 ---
 
-## Key Features
-
-*   **Custom Evaluation DSL**: A specialized programming language supporting logical operations, arithmetic, ternary conditional operators, regular expression parsing, built-in aggregate functions (`MIN`, `MAX`, `ROUND`), and custom evaluation constants (e.g., `absent`, `fraud`, `cancelled`).
-*   **Step-by-Step Transparency (`EXPLAIN`)**: The engine logs and tracks the AST evaluation path, computing an "original" formula, a "substituted" formula (values replaced with actual data), and the evaluated output.
-*   **Concurrent Go Backend**: Evaluates datasets sequentially or concurrently utilizing goroutines (one worker thread per data record), offering high-performance parallel execution.
-*   **Web Editor (Monaco + LSP)**: A web editor based on Monaco Editor, fully integrated with a custom language client communicating via WebSockets. It supports real-time syntax checking, diagnostic error highlighting, and context-aware auto-completion.
-*   **Data Editor**: A tabular editor to load, edit, add columns, add rows, and save INI-formatted dataset files directly from the browser.
-
----
-
 ## 📂 Project Structure
 
 ```text
@@ -77,7 +67,7 @@ APPLY x => x + 1 TO laboratory_1, laboratory_2, laboratory_3;
 
 ### 5. Advanced Functions & Operators
 *   **Ternary Operator**: `condition ? trueExpression : falseExpression`
-*   **Built-in Functions**: `MAX(a, b, ...)`, `MIN(a, b, ...)`, `ROUND(x)`
+*   **Built-in Functions**: `MAX(a, b)`, `MIN(a, b)`, `ROUND(x)`
 *   **Regex Operations**: `variable ~ "pattern"` (match) and `variable !~ "pattern"` (no match)
 *   **Predefined Status Constants**: `absent`, `present`, `excused`, `nothing`, `fraud`, `cancelled`, `invalid`, `alert`, `conflict`, `ungraded`, `obscured`, `toolow`.
 
@@ -96,9 +86,7 @@ Ensure you have **Go (1.20+)**, **Node.js (18+)**, and **npm** installed on your
    ```bash
    go build .
    ```
-3. Run the executable generated in the directory:
-   - **Windows**: `.\ParserGen.exe` (or the corresponding generated exe)
-   - **macOS/Linux**: `./ParserGen`
+3. Run the executable generated in the directory.
 
 The backend server will launch and listen for HTTP connections on `http://localhost:8080`.
 
